@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const BASE_URL = "https://db.drmanasaggarwal.com/api/v1"
+// const BASE_URL = "https://db.drmanasaggarwal.com/api/v1"
+const BASE_URL = "https://dr-manas-backend-gpg1.onrender.com"
 
 // const BASE_URL = "http://localhost:5004/api/v1/"
 
