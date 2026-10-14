@@ -16,14 +16,14 @@ const AppRoutes = () => {
 
   return (
     <Routes>
-      <Route path="/" element={isAuthenticated ? <Home /> : <Navigate to="/admin/login" />} />
-      <Route path="/website-content" element={isAuthenticated ? <WebsiteContent /> : <Navigate to="/admin/login" />} />
-      <Route path="/text-editor" element={isAuthenticated ? <TextEditor /> : <Navigate to="/admin/login" />} />
-      <Route path="/blog/add" element={isAuthenticated ? <BlogAdd /> : <Navigate to="/admin/login" />} />
-      <Route path="/blog/list" element={isAuthenticated ? <BlogView /> : <Navigate to="/admin/login" />} />
-      <Route path="/inquiry" element={isAuthenticated ? <Inquiry /> : <Navigate to="/admin/login" />} />
-      <Route path="/inquiry/detail" element={isAuthenticated ? <InquiryDetail /> : <Navigate to="/admin/login" />} />
-      <Route path="/admin/login" element={<LoginForm />} />
+      <Route path="/" element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
+      <Route path="/website-content" element={isAuthenticated ? <WebsiteContent /> : <Navigate to="/login" />} />
+      <Route path="/text-editor" element={isAuthenticated ? <TextEditor /> : <Navigate to="/login" />} />
+      <Route path="/blog/add" element={isAuthenticated ? <BlogAdd /> : <Navigate to="/login" />} />
+      <Route path="/blog/list" element={isAuthenticated ? <BlogView /> : <Navigate to="/login" />} />
+      <Route path="/inquiry" element={isAuthenticated ? <Inquiry /> : <Navigate to="/login" />} />
+      <Route path="/inquiry/detail" element={isAuthenticated ? <InquiryDetail /> : <Navigate to="/login" />} />
+      <Route path="/login" element={<LoginForm />} />
     </Routes>
   );
 };
