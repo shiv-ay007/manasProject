@@ -151,7 +151,7 @@ export default function CallbackModal({ classes, children }) {
           <span className="text-[10px] font-bold text-[#00B771] uppercase tracking-wider block mb-1">
             Free Callback Assistance
           </span>
-          <h2 className="text-2xl sm:text-[1.7rem] font-bold text-[#112340]">
+          <h2 className="text-2xl sm:text-[1.7rem] font-serif font-bold text-[#112340]">
             Request a Callback
           </h2>
           <p className="text-xs sm:text-sm text-gray-500 mt-1">
@@ -300,7 +300,7 @@ export default function CallbackModal({ classes, children }) {
           <button
             type="submit"
             disabled={loading || errors.phone}
-            className="w-full py-3.5 px-5 bg-gradient-to-r from-[#1495be] via-[#1CB6E6] to-[#0ea5e9] hover:from-[#18a2cd] hover:via-[#30c0ec] hover:to-[#1CB6E6] text-white font-bold text-sm sm:text-base rounded-xl shadow-lg shadow-[#1CB6E6]/30 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 cursor-pointer"
+            className="w-full py-3.5 px-5 bg-gradient-to-r from-[#1495be] via-[#1CB6E6] to-[#0ea5e9] hover:from-[#18a2cd] hover:via-[#30c0ec] hover:to-[#1CB6E6] text-white font-serif font-bold text-sm sm:text-base rounded-xl shadow-lg shadow-[#1CB6E6]/30 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 cursor-pointer"
           >
             {loading ? "Submitting Request..." : "Request a Callback Now →"}
           </button>

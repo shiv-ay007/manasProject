@@ -33,14 +33,14 @@ const AboutClinic = () => {
             {/* Left Side Content */}
             <div className="flex-1 z-10 relative p-6 md:p-10 lg:p-12 ">
                 <h1 
-                    className="text-xl font-bold mb-4 text-gray-600 transition duration-300 transform"
+                    className="text-xl font-serif font-bold mb-4 text-gray-600 transition duration-300 transform"
                     data-aos="fade-right"
                 >
                     About Dr. Manas Aggarwal
                 </h1>
-                <h1 className="mb-2" data-aos="fade-right" data-aos-delay="100">Dedicated to Pancreatic Disorders</h1>
+                <h1 className="mb-2 font-serif" data-aos="fade-right" data-aos-delay="100">Dedicated to Pancreatic Disorders</h1>
                 <h3 
-                    className="text-xl font-medium mb-4 text-gray-600"
+                    className="text-xl font-serif font-medium mb-4 text-gray-600"
                     data-aos="fade-right" 
                     data-aos-delay="200"
                 >

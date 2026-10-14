@@ -91,8 +91,8 @@ const categoryDetails = {
 const CategorySection = ({ selectedCategory, setSelectedCategory }) => {
   return (
     <div className="text-center py-12">
-      <h1 className=" mb-4">What We Care For</h1>
-      <h2 className=" mb-8 text-sm md:text-base">
+      <h1 className="font-serif font-bold text-2xl sm:text-3xl mb-4">What We Care For</h1>
+      <h2 className="font-serif mb-8 text-sm md:text-base">
         Making professional therapy accessible
       </h2>
       <div className="flex flex-wrap justify-center space-x-4 sm:space-x-8">
@@ -147,7 +147,7 @@ const CategoryDetails = ({ selectedCategory }) => {
     >
       {/* Text Section */}
       <div className="lg:w-1/2 space-y-4 text-center lg:text-left px-4">
-        <h2 className="text-xl sm:text-2xl font-semibold mb-4">{details.title}</h2>
+        <h2 className="text-xl sm:text-2xl font-serif font-semibold mb-4">{details.title}</h2>
         <p className="text-gray-600 text-sm sm:text-base">{details.description}</p>
         <p className="text-gray-500 text-sm sm:text-base">{details.subDescription}</p>
 
@@ -157,7 +157,7 @@ const CategoryDetails = ({ selectedCategory }) => {
             <div key={index} className="flex items-start space-x-4" data-aos="fade-right">
               <div className="text-2xl text-blue-600">{iconDetail.icon}</div>
               <div>
-                <h4 className="text-base sm:text-lg font-semibold">{iconDetail.title}</h4>
+                <h4 className="text-base sm:text-lg font-serif font-semibold">{iconDetail.title}</h4>
                 <p className="text-gray-500 text-xs sm:text-sm">{iconDetail.description}</p>
               </div>
             </div>

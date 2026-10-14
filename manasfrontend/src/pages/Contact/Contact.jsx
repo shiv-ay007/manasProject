@@ -107,7 +107,7 @@ const ContactPage = () => {
                         >
                             <div className="flex flex-col items-center">
                                 <FaPhoneAlt className="text-6xl text-[#4A6F8F] mb-4 transition-transform group-hover:scale-125" />
-                                <h2 className="text-2xl font-bold text-gray-800 group-hover:text-[#4A6F8F] transition-colors">Call Us</h2>
+                                <h2 className="text-2xl font-serif font-bold text-gray-800 group-hover:text-[#4A6F8F] transition-colors">Call Us</h2>
                                 <p className="mt-2 text-lg text-gray-600 font-medium group-hover:text-gray-800">+91-8318208837</p>
                             </div>
                         </a>
@@ -119,7 +119,7 @@ const ContactPage = () => {
                         >
                             <div className="flex flex-col items-center">
                                 <FaEnvelope className="text-6xl text-[#4A6F8F] mb-4 transition-transform group-hover:scale-125" />
-                                <h2 className="text-2xl font-bold text-gray-800 group-hover:text-[#4A6F8F] transition-colors">Email Us</h2>
+                                <h2 className="text-2xl font-serif font-bold text-gray-800 group-hover:text-[#4A6F8F] transition-colors">Email Us</h2>
                                 <p className="mt-2 text-lg text-gray-600 font-medium group-hover:text-gray-800">aggarwal.manas@gmail.com</p>
                             </div>
                         </a>
@@ -133,7 +133,7 @@ const ContactPage = () => {
                         >
                             <div className="flex flex-col items-center">
                                 <FaMapMarkerAlt className="text-6xl text-[#4A6F8F] mb-4 transition-transform group-hover:scale-125" />
-                                <h2 className="text-2xl font-bold text-gray-800 group-hover:text-[#4A6F8F] transition-colors">Visit Us</h2>
+                                <h2 className="text-2xl font-serif font-bold text-gray-800 group-hover:text-[#4A6F8F] transition-colors">Visit Us</h2>
                                 <p className="mt-2 text-lg text-gray-600 font-medium group-hover:text-gray-800">
                                     Chandan Hospital, Faizabad Rd, Gomti Nagar, Lucknow
                                 </p>
@@ -158,7 +158,7 @@ const ContactPage = () => {
 
         {/* Contact Form */}
         <div className="flex flex-col justify-center">
-            <h2 className="text-3xl font-bold text-center mb-8 text-[#4A6F8F]">Send Us a Message</h2>
+            <h2 className="text-3xl font-serif font-bold text-center mb-8 text-[#4A6F8F]">Send Us a Message</h2>
             <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="relative">
                     <input
@@ -217,7 +217,7 @@ const ContactPage = () => {
                 </div>
                 <button
                     type="submit"
-                    className="w-full py-4 bg-gradient-to-r from-[#4A6F8F] to-[#1A466D] text-white rounded-lg hover:shadow-lg transition transform hover:-translate-y-1"
+                    className="w-full py-4 bg-gradient-to-r from-[#4A6F8F] to-[#1A466D] text-white font-serif font-bold rounded-lg hover:shadow-lg transition transform hover:-translate-y-1"
                     disabled={isLoading}
                 >
                     {isLoading ? (

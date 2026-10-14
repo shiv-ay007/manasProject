@@ -173,10 +173,10 @@ const ServiceCard1 = () => {
       {/* Service Cards */}
       <div className="max-w-7xl mx-auto p-8 md:p-12">
         <div className='text-start md:text-center flex flex-col md:items-center justify-center'>
-          <h2 className="font-bold mb-4 transition duration-300 transform">
+          <h2 className="font-serif font-bold mb-4 transition duration-300 transform">
             What We Provide Treatment
           </h2>
-          <h1 className="mb-8 lg:w-1/2 lg:text-center">We Deliver Best Quality Care Treatment in Lucknow</h1>
+          <h1 className="font-serif font-bold text-2xl sm:text-3xl mb-8 lg:w-1/2 lg:text-center">We Deliver Best Quality Care Treatment in Lucknow</h1>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">

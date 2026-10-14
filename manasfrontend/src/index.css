@@ -10,82 +10,36 @@ body {
     overflow-x: clip;
   }
 
-  h1 {
-    font-weight: 900;
-    line-height: 1.066;
-    font-family: "Overlock", Arial, Helvetica, sans-serif;
-    color: #374151;
-    /* Responsive font-size */
-    font-size: 1.5rem; /* Default for smaller screens */
-   
-  }
-  
-  .tooltip {
-    display: none; /* Hide by default */
-  }
-  
-  .group:hover .tooltip {
-    display: block; /* Show on hover */
-    position: absolute; /* Adjust positioning */
-    background-color: black; /* Background color */
-    color: white; /* Text color */
-    padding: 0.5rem; /* Some padding */
-    border-radius: 4px; /* Rounded corners */
-    top: 100%; /* Position below the icon */
-    left: 50%; /* Center horizontally */
-    transform: translateX(-50%); /* Adjust horizontal alignment */
-    white-space: nowrap; /* Prevent line breaks */
-  }
-  
+/* Signature Serif Typography across all Headings, Titles and CTAs */
+h1, h2, h3, h4, h5, h6,
+.font-serif,
+.font-heading {
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif !important;
+}
 
+/* Also apply the signature font to dedicated CTA buttons */
+.button,
+.btn-cta,
+.cta-button {
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+}
 
+.tooltip {
+  display: none; /* Hide by default */
+}
 
-  h2 {
-    font-family: "Overlock", Arial, Helvetica, sans-serif;
-    color: #7fbe49;
-    font-weight: 600;
-    font-size: 1rem; /* Default for smaller screens */
-  }
-
-
-
-  
-  /* Media queries for larger screens */
-  @media (min-width: 640px) {
-    h1 {
-      font-size: 2.5rem; /* Small tablets and up */
-    }
-    h2 {
-      font-size: 1rem;
-    }
-  }
-  
-  @media (min-width: 768px) {
-    h1 {
-      font-size: 3rem; /* Tablets and up */
-    }
-    h2 {
-      font-size: 1rem;
-    }
-  }
-  
-  @media (min-width: 1024px) {
-    h1 {
-      font-size: 2rem; /* Larger tablets and desktops */
-    }
-    h2 {
-      font-size: 1.2rem;
-    }
-  }
-  
-  @media (min-width: 1280px) {
-    h1 {
-      font-size: 2.5rem; /* Laptops and desktops */
-    }
-    h2 {
-      font-size: 1.4rem;
-    }
-  }
+.group:hover .tooltip {
+  display: block; /* Show on hover */
+  position: absolute; /* Adjust positioning */
+  background-color: black; /* Background color */
+  color: white; /* Text color */
+  padding: 0.5rem; /* Some padding */
+  border-radius: 4px; /* Rounded corners */
+  top: 100%; /* Position below the icon */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Adjust horizontal alignment */
+  white-space: nowrap; /* Prevent line breaks */
+}
   
 
 /* Left Side Background Pattern */
@@ -506,14 +460,14 @@ body {
 }
 
 .blog-content-body h2 {
-  font-size: 1.35rem;
+  font-size: 1.45rem;
   color: #112340;
-  margin-top: 2.75rem;
-  margin-bottom: 1.25rem;
-  padding: 0.75rem 1.25rem;
-  background: linear-gradient(to right, #f2f9f6, #ffffff);
-  border-left: 4px solid #00B771;
-  border-radius: 0 1rem 1rem 0;
+  margin-top: 2.25rem;
+  margin-bottom: 0.85rem;
+  padding: 0;
+  background: transparent;
+  border-left: none;
+  border-radius: 0;
   letter-spacing: -0.01em;
 }
 

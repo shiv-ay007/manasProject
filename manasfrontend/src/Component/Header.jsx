@@ -265,6 +265,8 @@ const Header = () => {
       ${active ? 'after:scale-x-100' : ''}`;
   };
 
+  const isTreatmentsActive = location.pathname.startsWith('/treatment');
+
   const handleLinkClick = () => {
     setActiveDropdown(null);
     setActiveSubDropdown(null);
@@ -324,12 +326,18 @@ const Header = () => {
               }}
             >
               <button
+                type="button"
                 onClick={toggleTreatments}
-                className={`flex items-center gap-1 px-3 py-2 text-[0.95rem] font-medium tracking-wide rounded-md transition-colors duration-300 ${
-                  activeDropdown === 'treatments'
-                    ? 'text-teal-700 font-semibold'
-                    : 'text-gray-800 hover:text-teal-700'
-                }`}
+                className={`relative flex items-center gap-1 px-3 py-2 text-[0.95rem] font-medium !font-poppins tracking-wide rounded-md transition-colors duration-300
+                  ${
+                    isTreatmentsActive || activeDropdown === 'treatments'
+                      ? 'text-teal-700 font-semibold'
+                      : 'text-gray-800 hover:text-teal-700'
+                  }
+                  after:content-[''] after:absolute after:left-3 after:right-3 after:-bottom-0.5 after:h-[2px]
+                  after:bg-teal-600 after:rounded-full after:origin-left after:scale-x-0
+                  hover:after:scale-x-100 after:transition-transform after:duration-300
+                  ${isTreatmentsActive ? 'after:scale-x-100' : ''}`}
               >
                 Our Treatments
                 <IoMdArrowDropdown
@@ -421,7 +429,7 @@ const Header = () => {
               <BookApointement>
                 <button
                   type="button"
-                  className="group relative inline-flex items-center gap-2.5 px-5 py-2.5 text-[0.88rem] font-semibold text-white tracking-wide rounded-full overflow-hidden transition-all duration-300 bg-gradient-to-r from-[#1495be] via-[#1CB6E6] to-[#0ea5e9] hover:from-[#18a2cd] hover:via-[#30c0ec] hover:to-[#1CB6E6] shadow-[0_4px_16px_rgba(28,182,230,0.38)] hover:shadow-[0_6px_24px_rgba(28,182,230,0.55)] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] border border-white/30 cursor-pointer"
+                  className="group relative inline-flex items-center gap-2.5 px-5 py-2.5 text-[0.88rem] font-serif font-semibold text-white tracking-wide rounded-full overflow-hidden transition-all duration-300 bg-gradient-to-r from-[#1495be] via-[#1CB6E6] to-[#0ea5e9] hover:from-[#18a2cd] hover:via-[#30c0ec] hover:to-[#1CB6E6] shadow-[0_4px_16px_rgba(28,182,230,0.38)] hover:shadow-[0_6px_24px_rgba(28,182,230,0.55)] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] border border-white/30 cursor-pointer"
                 >
                   {/* Shimmer sweep animation */}
                   <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out pointer-events-none" />
@@ -512,7 +520,7 @@ const Header = () => {
                     activeDropdown === 'treatments' ? null : 'treatments'
                   )
                 }
-                className={`flex items-center justify-between w-full px-3 py-2.5 rounded-lg
+                className={`flex items-center justify-between w-full px-3 py-2.5 rounded-lg !font-poppins font-medium
                   transition-colors duration-200
                   ${
                     activeDropdown === 'treatments'
@@ -648,7 +656,7 @@ const Header = () => {
               <BookApointement>
                 <button
                   type="button"
-                  className="group relative w-full flex items-center justify-center gap-2.5 px-5 py-3 text-sm font-semibold text-white tracking-wide rounded-xl overflow-hidden transition-all duration-300 bg-gradient-to-r from-[#1495be] via-[#1CB6E6] to-[#0ea5e9] hover:from-[#18a2cd] hover:via-[#30c0ec] hover:to-[#1CB6E6] shadow-lg shadow-[#1CB6E6]/30 active:scale-98 border border-white/25 cursor-pointer"
+                  className="group relative w-full flex items-center justify-center gap-2.5 px-5 py-3 text-sm font-serif font-semibold text-white tracking-wide rounded-xl overflow-hidden transition-all duration-300 bg-gradient-to-r from-[#1495be] via-[#1CB6E6] to-[#0ea5e9] hover:from-[#18a2cd] hover:via-[#30c0ec] hover:to-[#1CB6E6] shadow-lg shadow-[#1CB6E6]/30 active:scale-98 border border-white/25 cursor-pointer"
                 >
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-white/25 text-white shadow-inner group-hover:scale-110 transition-all duration-300 shrink-0">
                     <FiPhoneCall className="text-[11px]" />

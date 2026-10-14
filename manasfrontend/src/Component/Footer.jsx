@@ -122,7 +122,7 @@ const Footer = () => {
             {/* Column 1: Doctor Profile & Contacts */}
             <div className="lg:col-span-4 flex flex-col justify-between">
               <div>
-                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-1 font-sans">
+                <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-1 font-serif">
                   Dr. Manas Aggarwal
                 </h3>
                 <p className="text-[0.7rem] sm:text-[0.74rem] font-semibold text-[#00c9a7] tracking-wider uppercase mb-4">

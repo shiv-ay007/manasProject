@@ -109,7 +109,7 @@ const HomeAbout = () => {
                 {/* Trust Text & 5 Golden Stars */}
                 <div className="flex flex-col justify-center">
                   <div className="flex items-center gap-2">
-                    <h4 className="text-[1.05rem] sm:text-[1.12rem] font-extrabold text-[#112340] tracking-tight leading-snug">
+                    <h4 className="text-[1.05rem] sm:text-[1.12rem] font-serif font-extrabold text-[#112340] tracking-tight leading-snug">
                       Trusted by 16,000+ Happy Patients
                     </h4>
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse hidden sm:inline-block" />
@@ -137,7 +137,7 @@ const HomeAbout = () => {
             {/* Pill CTA Button */}
             <div className="mt-6">
               <Link to="/about-dr-manas-aggarwal" className="inline-block">
-                <button className="group relative inline-flex items-center gap-2.5 px-6 sm:px-7 py-3 text-[0.88rem] font-semibold text-white tracking-wide rounded-full overflow-hidden transition-all duration-300 bg-gradient-to-r from-[#1495be] via-[#1CB6E6] to-[#0ea5e9] hover:from-[#18a2cd] hover:via-[#30c0ec] hover:to-[#1CB6E6] shadow-[0_4px_16px_rgba(28,182,230,0.38)] hover:shadow-[0_6px_24px_rgba(28,182,230,0.55)] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] border border-white/30 cursor-pointer">
+                <button className="group relative inline-flex items-center gap-2.5 px-6 sm:px-7 py-3 text-[0.88rem] font-serif font-semibold text-white tracking-wide rounded-full overflow-hidden transition-all duration-300 bg-gradient-to-r from-[#1495be] via-[#1CB6E6] to-[#0ea5e9] hover:from-[#18a2cd] hover:via-[#30c0ec] hover:to-[#1CB6E6] shadow-[0_4px_16px_rgba(28,182,230,0.38)] hover:shadow-[0_6px_24px_rgba(28,182,230,0.55)] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] border border-white/30 cursor-pointer">
                   {/* Shimmer sweep animation */}
                   <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out pointer-events-none" />
 

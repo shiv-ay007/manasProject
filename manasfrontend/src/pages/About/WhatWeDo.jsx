@@ -11,8 +11,8 @@ const WhatWeDo = () => {
       
             {/* Left Side Content */}
             <div className="flex-1 z-10 relative p-4 md:p-6 lg:p-10">
-                <h2 className="text-2xl font-bold mb-4 text-gray-700">What We Do</h2>
-                <h1 className="mb-2">We Deliver Quality Care Giving Services</h1>
+                <h2 className="text-2xl font-serif font-bold mb-4 text-gray-700">What We Do</h2>
+                <h1 className="mb-2 font-serif font-bold text-2xl sm:text-3xl text-gray-800">We Deliver Quality Care Giving Services</h1>
                 <p className="text-lg mb-4 text-gray-600 leading-relaxed">
                     Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
                 </p>

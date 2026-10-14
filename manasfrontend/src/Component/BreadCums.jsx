@@ -27,7 +27,7 @@ const BreadCrumbs = ({ items, headText, image }) => {
 
       {/* Heading with Brilliant Contrast */}
       <h1
-        className="!text-white text-3xl sm:text-4xl md:text-5xl font-black text-center relative z-20 px-4 mb-3 tracking-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
+        className="!text-white text-3xl sm:text-4xl md:text-5xl font-serif font-black text-center relative z-20 px-4 mb-3 tracking-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)]"
         data-aos="fade-up"
       >
         {headText}

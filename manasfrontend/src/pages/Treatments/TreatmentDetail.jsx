@@ -221,7 +221,7 @@ const TreatmentDetail = () => {
                       className="w-12 h-12 rounded-xl object-cover object-top border border-teal-200 shadow-xs bg-teal-50"
                     />
                     <div>
-                      <h4 className="font-bold text-gray-900 text-sm leading-snug">
+                      <h4 className="font-serif font-bold text-gray-900 text-sm leading-snug">
                         Dr. Manas Aggarwal
                       </h4>
                       <p className="text-[11px] text-[#00B771] font-semibold">
@@ -237,7 +237,7 @@ const TreatmentDetail = () => {
                     <BookApointement classes="flex-1 sm:flex-initial">
                       <button
                         type="button"
-                        className="w-full sm:w-auto px-4 py-2.5 bg-[#00B771] hover:bg-[#009e5f] text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="w-full sm:w-auto px-4 py-2.5 bg-[#00B771] hover:bg-[#009e5f] text-white font-serif font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                       >
                         <FaCalendarAlt />
                         <span>Book Consult</span>
@@ -319,7 +319,7 @@ const TreatmentDetail = () => {
                       Causes &amp; Factors
                     </span>
                   </div>
-                  <h3 className="text-lg sm:text-xl font-bold text-[#112340] mb-4">
+                  <h3 className="text-lg sm:text-xl font-serif font-bold text-[#112340] mb-4">
                     Common Causes &amp; Risk Factors
                   </h3>
                   <ul className="space-y-3">
@@ -344,7 +344,7 @@ const TreatmentDetail = () => {
                       Clinical Indicators
                     </span>
                   </div>
-                  <h3 className="text-lg sm:text-xl font-bold text-[#112340] mb-4">
+                  <h3 className="text-lg sm:text-xl font-serif font-bold text-[#112340] mb-4">
                     Key Symptoms &amp; Warning Signs
                   </h3>
                   <ul className="space-y-3">
@@ -393,7 +393,7 @@ const TreatmentDetail = () => {
                         <div className="w-9 h-9 rounded-xl bg-emerald-50 text-[#00B771] group-hover:bg-white/20 group-hover:text-white group-hover:backdrop-blur-sm group-hover:border group-hover:border-white/30 flex items-center justify-center text-sm font-bold mb-3.5 transition-all duration-500 shadow-2xs">
                           0{idx + 1}
                         </div>
-                        <h4 className="font-bold text-gray-900 group-hover:text-white transition-colors duration-500 text-base sm:text-lg mb-2">
+                        <h4 className="font-serif font-bold text-gray-900 group-hover:text-white transition-colors duration-500 text-base sm:text-lg mb-2">
                           {item.title}
                         </h4>
                         <p className="text-xs sm:text-sm text-gray-600 group-hover:text-teal-50 transition-colors duration-500 leading-relaxed">

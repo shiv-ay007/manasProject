@@ -57,8 +57,8 @@ const TestimonialPage = () => {
     <div className="bg-gray-200 py-20">
       <div className="max-w-screen-xl mx-auto px-4 ">
         <div className='flex flex-col items-start md:items-center md:justify-center gap-2 mb-8'>
-          <h2 className=''>Our Testimonials</h2>
-          <h1 className=''>What Our Patients Say</h1>
+          <h2 className='font-serif text-base sm:text-lg font-bold text-[#0e6b56] uppercase tracking-wider'>Our Testimonials</h2>
+          <h1 className='font-serif text-2xl sm:text-3xl font-bold text-[#112340]'>What Our Patients Say</h1>
         </div>
 
         {/* Adding space between cards */}

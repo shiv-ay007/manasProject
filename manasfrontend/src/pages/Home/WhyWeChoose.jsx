@@ -115,7 +115,7 @@ const WhyChooseUs = () => {
 
                 {/* Content */}
                 <div className="flex-1 pr-6">
-                  <h3 className="text-base sm:text-[1.08rem] font-bold text-[#112340] group-hover:text-white transition-colors duration-500 leading-snug mb-1.5">
+                  <h3 className="text-base sm:text-[1.08rem] font-serif font-bold text-[#112340] group-hover:text-white transition-colors duration-500 leading-snug mb-1.5">
                     {card.title}
                   </h3>
                   <p className="text-xs sm:text-[0.84rem] text-gray-500 group-hover:text-white/90 transition-colors duration-500 leading-relaxed">

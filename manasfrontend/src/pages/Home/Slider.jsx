@@ -107,7 +107,7 @@ const HomeSlider = () => {
                       <span className="text-gray-200 hidden sm:inline">{slide.subBadge}</span>
                     </div>
 
-                    <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-[2.65rem] font-bold text-white leading-tight drop-shadow-md">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-[2.65rem] font-serif font-bold text-white leading-tight drop-shadow-md">
                       {slide.title}
                     </h2>
 
@@ -120,14 +120,14 @@ const HomeSlider = () => {
                         href={slide.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white text-xs sm:text-sm font-semibold shadow-[0_4px_16px_rgba(16,185,129,0.35)] transition-all transform hover:-translate-y-0.5 cursor-pointer"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white text-xs sm:text-sm font-serif font-semibold shadow-[0_4px_16px_rgba(16,185,129,0.35)] transition-all transform hover:-translate-y-0.5 cursor-pointer"
                       >
                         <span>{slide.actionText}</span>
                         <span>→</span>
                       </a>
                       <Link
                         to="/about-dr-manas-aggarwal"
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-medium border border-white/25 backdrop-blur-sm transition-colors"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-serif font-medium border border-white/25 backdrop-blur-sm transition-colors"
                       >
                         <span>About Dr. Manas</span>
                       </Link>
@@ -207,7 +207,7 @@ const HomeSlider = () => {
 
               {/* Middle Content */}
               <div className="flex-1 min-w-0 pr-1">
-                <h3 className="font-extrabold text-[1.12rem] sm:text-[1.2rem] text-[#112340] group-hover:text-[#00B771] transition-colors leading-tight">
+                <h3 className="font-serif font-extrabold text-[1.12rem] sm:text-[1.2rem] text-[#112340] group-hover:text-[#00B771] transition-colors leading-tight">
                   Book Appointment
                 </h3>
                 <p className="text-gray-500 text-xs sm:text-[0.82rem] mt-1.5 leading-snug">
@@ -243,7 +243,7 @@ const HomeSlider = () => {
 
               {/* Middle Content */}
               <div className="flex-1 min-w-0 pr-1">
-                <h3 className="font-extrabold text-[1.12rem] sm:text-[1.2rem] text-[#112340] group-hover:text-[#1982ea] transition-colors leading-tight">
+                <h3 className="font-serif font-extrabold text-[1.12rem] sm:text-[1.2rem] text-[#112340] group-hover:text-[#1982ea] transition-colors leading-tight">
                   Explore Our Cases
                 </h3>
                 <p className="text-gray-500 text-xs sm:text-[0.82rem] mt-1.5 leading-snug">
@@ -279,7 +279,7 @@ const HomeSlider = () => {
 
               {/* Middle Content */}
               <div className="flex-1 min-w-0 pr-1">
-                <h3 className="font-extrabold text-[1.12rem] sm:text-[1.2rem] text-[#112340] group-hover:text-[#f26a0f] transition-colors leading-tight">
+                <h3 className="font-serif font-extrabold text-[1.12rem] sm:text-[1.2rem] text-[#112340] group-hover:text-[#f26a0f] transition-colors leading-tight">
                   Contact Us
                 </h3>
                 <p className="text-gray-500 text-xs sm:text-[0.82rem] mt-1.5 leading-snug">

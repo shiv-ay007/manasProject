@@ -46,7 +46,7 @@ const BookNowSection = () => {
                 </div>
 
                 {/* Main Heading */}
-                <h2 className="text-xl sm:text-2xl lg:text-[1.75rem] font-bold text-[#112340] leading-snug tracking-tight">
+                <h2 className="text-xl sm:text-2xl lg:text-[1.75rem] font-serif font-bold text-[#112340] leading-snug tracking-tight">
                   Book Your <span className="text-[#00B771]">Consultation Today</span>
                 </h2>
 
@@ -65,7 +65,7 @@ const BookNowSection = () => {
               <BookApointement>
                 <button
                   type="button"
-                  className="group relative inline-flex items-center justify-center gap-2.5 px-6 sm:px-7 py-3.5 bg-gradient-to-r from-[#00b26b] to-[#00B771] hover:from-[#009e5f] hover:to-[#00a867] text-white font-bold text-sm sm:text-[0.95rem] rounded-2xl shadow-[0_8px_22px_rgba(0,183,113,0.35)] hover:shadow-[0_12px_28px_rgba(0,183,113,0.48)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 border border-white/20 cursor-pointer w-full sm:w-auto overflow-hidden"
+                  className="group relative inline-flex items-center justify-center gap-2.5 px-6 sm:px-7 py-3.5 bg-gradient-to-r from-[#00b26b] to-[#00B771] hover:from-[#009e5f] hover:to-[#00a867] text-white font-serif font-bold text-sm sm:text-[0.95rem] rounded-2xl shadow-[0_8px_22px_rgba(0,183,113,0.35)] hover:shadow-[0_12px_28px_rgba(0,183,113,0.48)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 border border-white/20 cursor-pointer w-full sm:w-auto overflow-hidden"
                 >
                   <FaCalendarAlt className="text-sm shrink-0" />
                   <span className="whitespace-nowrap">Request a Callback</span>

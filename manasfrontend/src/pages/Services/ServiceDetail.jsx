@@ -70,7 +70,7 @@ const BreadCrumbs = ({ items, headText ,image,text}) => {
       <div className="absolute inset-0 bg-black bg-opacity-40 z-10"></div>
 
       {/* Heading */}
-      <h1 className="text-white text-center relative z-20 sora-600 px-4 mb-4 " data-aos="fade-up">
+      <h1 className="text-white text-center relative z-20 sora-600 px-4 mb-4 font-serif" data-aos="fade-up">
         {headText}
       </h1>
 

@@ -87,7 +87,7 @@ const FaqSection = () => {
                     >
                       <BsQuestionCircle className="text-sm" />
                     </div>
-                    <span className="text-sm sm:text-base font-bold text-[#112340] font-sans">
+                    <span className="text-sm sm:text-base font-bold text-[#112340] font-serif">
                       {faq.q}
                     </span>
                   </div>

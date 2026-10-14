@@ -108,7 +108,7 @@ const TestimonialPage = () => {
                   className="w-16 h-16 rounded-full border-4 border-[#4A6F8F] shadow-lg"
                 />
                 <div className="ml-4">
-                  <h3 className="text-2xl font-semibold text-gray-800">{testimonial.name}</h3>
+                  <h3 className="text-2xl font-serif font-semibold text-gray-800">{testimonial.name}</h3>
                   <p className="text-gray-500 text-sm italic">{testimonial.date}</p>
                 </div>
               </div>

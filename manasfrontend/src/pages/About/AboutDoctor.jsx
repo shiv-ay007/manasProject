@@ -12,7 +12,8 @@ import {
   FaPhoneAlt, 
   FaEnvelope, 
   FaUserMd, 
-  FaProcedures
+  FaProcedures,
+  FaHeartbeat
 } from "react-icons/fa";
 import { FaInstagram, FaFacebookF, FaYoutube, FaWhatsapp } from 'react-icons/fa';
 import doctorimg from '../../assets/doctor.png';
@@ -183,7 +184,7 @@ const DoctorAbout = () => {
 
                 {/* Heading */}
                 <div>
-                  <h1 className="text-3xl sm:text-4xl lg:text-[2.85rem] font-bold text-[#112340] tracking-tight leading-[1.18] font-sans">
+                  <h1 className="text-3xl sm:text-4xl lg:text-[2.85rem] font-bold text-[#112340] tracking-tight leading-[1.18] font-serif">
                     About <br className="hidden sm:inline" />
                     <span className="text-[#00B771]">Dr. Manas Aggarwal</span>
                   </h1>
@@ -290,7 +291,7 @@ const DoctorAbout = () => {
 
               {/* Floating Glass Badge Card - snug and connected to doctor cutout */}
               <div className="relative z-20 w-full max-w-sm -mt-5 sm:-mt-7 bg-white/95 backdrop-blur-md rounded-2xl p-3.5 sm:p-4 border border-teal-100 shadow-[0_10px_30px_rgba(0,0,0,0.1)] text-center transition-all duration-500 hover:shadow-[0_14px_35px_rgba(0,183,113,0.18)]">
-                <h3 className="font-bold text-[#112340] text-base sm:text-lg font-sans">
+                <h3 className="font-bold text-[#112340] text-base sm:text-lg font-serif">
                   Dr. Manas Aggarwal
                 </h3>
                 <p className="text-xs sm:text-[0.82rem] text-[#00B771] font-bold mt-0.5">
@@ -323,20 +324,118 @@ const DoctorAbout = () => {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" data-aos="fade-up">
-          {/* Section Header */}
-          <div className="max-w-3xl mb-8 md:mb-10">
-            <div className="flex items-center gap-2 mb-2.5">
-              <span className="w-8 h-0.5 bg-[#00B771] rounded-full" />
-              <span className="text-xs sm:text-sm font-bold tracking-wider text-[#0e6b56] uppercase">
-                Practice Philosophy
-              </span>
+          {/* Section Header with Minimal Animated Philosophy Triad on the Right */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center mb-10 md:mb-12">
+            
+            {/* Left Column (7 cols): Main Narrative */}
+            <div className="lg:col-span-7">
+              <div className="flex items-center gap-2 mb-2.5">
+                <span className="w-8 h-0.5 bg-[#00B771] rounded-full" />
+                <span className="text-xs sm:text-sm font-bold tracking-wider text-[#0e6b56] uppercase">
+                  Practice Philosophy
+                </span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-[#112340] tracking-tight">
+                Holistic, Ethical &amp; Evidence-Based Healing
+              </h2>
+              <p className="mt-3 text-gray-600 text-sm sm:text-base lg:text-lg leading-relaxed">
+                Dr. Manas Aggarwal’s practice is built upon the foundational belief that clinical care must be ethical, compassionate, and evidence-based. Combining modern scientific protocols with mindful lifestyle modifications and specialized dietary strategies, medications and surgical options are reserved strictly for refractory cases.
+              </p>
             </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-[#112340] tracking-tight">
-              Holistic, Ethical &amp; Evidence-Based Healing
-            </h2>
-            <p className="mt-3 text-gray-600 text-sm sm:text-base lg:text-lg leading-relaxed">
-              Dr. Manas Aggarwal’s practice is built upon the foundational belief that clinical care must be ethical, compassionate, and evidence-based. Combining modern scientific protocols with mindful lifestyle modifications and specialized dietary strategies, medications and surgical options are reserved strictly for refractory cases.
-            </p>
+
+            {/* Right Column (5 cols): Minimal Animated Healing Triad & Vitals Widget */}
+            <div className="lg:col-span-5 flex justify-center lg:justify-end" data-aos="fade-left">
+              <div className="relative w-full max-w-[420px] bg-white/85 backdrop-blur-md rounded-3xl p-5 sm:p-6 border border-teal-100 shadow-[0_10px_35px_rgba(20,150,170,0.08)] hover:shadow-[0_16px_45px_rgba(20,150,170,0.14)] transition-all duration-500 overflow-hidden group">
+                
+                {/* Background Ambient Glows */}
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-emerald-400/15 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-700" />
+                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-cyan-400/15 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-700" />
+
+                {/* Top Status Header */}
+                <div className="relative z-10 flex items-center justify-between mb-4">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-[#0e6b56] text-[11px] font-bold tracking-wide">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00B771] opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00B771]"></span>
+                    </span>
+                    <span>Patient-First Philosophy</span>
+                  </div>
+                  <span className="text-[10px] font-mono font-bold text-gray-400 tracking-wider">
+                    EVIDENCE-BASED
+                  </span>
+                </div>
+
+                {/* Interactive Animated Triad Orbit Visualization */}
+                <div className="relative z-10 my-2 h-[155px] flex items-center justify-center">
+                  
+                  {/* Concentric Pulse Rings */}
+                  <div className="absolute w-32 h-32 rounded-full border border-teal-200/60 animate-ping opacity-25 pointer-events-none" style={{ animationDuration: '3s' }} />
+                  <div className="absolute w-40 h-40 rounded-full border border-dashed border-teal-200/50 pointer-events-none" />
+
+                  {/* Connecting SVG Curved Dashed Rays */}
+                  <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 360 160">
+                    <line x1="180" y1="78" x2="65" y2="42" stroke="#10b981" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.4" />
+                    <line x1="180" y1="78" x2="295" y2="42" stroke="#0ea5e9" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.4" />
+                    <line x1="180" y1="78" x2="180" y2="135" stroke="#00B771" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.4" />
+                  </svg>
+
+                  {/* Core Hub Badge */}
+                  <div className="relative z-20 w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00B771] to-[#0b6b55] text-white flex flex-col items-center justify-center shadow-[0_8px_20px_rgba(0,183,113,0.35)] border-2 border-white group-hover:scale-105 transition-transform duration-300">
+                    <FaHeartbeat className="text-xl animate-pulse" />
+                    <span className="text-[9px] font-extrabold tracking-tight mt-0.5">HEALING</span>
+                  </div>
+
+                  {/* Satellite 1: Top Left - Holistic / Lifestyle */}
+                  <div className="absolute top-1 left-1 sm:left-3 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-sm border border-emerald-200/80 shadow-[0_4px_12px_rgba(0,0,0,0.06)] hover:border-emerald-400 transition-all duration-300 hover:scale-105">
+                    <div className="w-5 h-5 rounded-full bg-emerald-50 text-[#00B771] flex items-center justify-center text-xs">
+                      <FaLeaf />
+                    </div>
+                    <span className="text-[11px] font-bold text-gray-800">Diet &amp; Mind</span>
+                  </div>
+
+                  {/* Satellite 2: Top Right - Ethical Standards */}
+                  <div className="absolute top-1 right-1 sm:right-3 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-sm border border-teal-200/80 shadow-[0_4px_12px_rgba(0,0,0,0.06)] hover:border-teal-400 transition-all duration-300 hover:scale-105">
+                    <div className="w-5 h-5 rounded-full bg-teal-50 text-[#0e6b56] flex items-center justify-center text-xs">
+                      <FaShieldAlt />
+                    </div>
+                    <span className="text-[11px] font-bold text-gray-800">Ethical Care</span>
+                  </div>
+
+                  {/* Satellite 3: Bottom Center - Evidence-Based Surgery */}
+                  <div className="absolute bottom-0 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-sm border border-cyan-200/80 shadow-[0_4px_12px_rgba(0,0,0,0.06)] hover:border-cyan-400 transition-all duration-300 hover:scale-105">
+                    <div className="w-5 h-5 rounded-full bg-cyan-50 text-[#1495be] flex items-center justify-center text-xs">
+                      <FaMicroscope />
+                    </div>
+                    <span className="text-[11px] font-bold text-gray-800">Precision Surgery</span>
+                  </div>
+
+                </div>
+
+                {/* Animated ECG Lifeline Bar at Bottom */}
+                <div className="relative z-10 pt-3 mt-3 border-t border-teal-100/70 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2">
+                    <svg className="w-24 h-4 text-[#00B771]" viewBox="0 0 100 20" fill="none">
+                      <path
+                        d="M0 10 H25 L32 2 L40 18 L48 7 L55 12 L60 10 H100"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="animate-pulse"
+                      />
+                    </svg>
+                    <span className="text-[11px] font-semibold text-gray-600">
+                      Conservative First, Surgery Last
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-bold text-[#00B771] bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
+                    100% Ethical
+                  </span>
+                </div>
+
+              </div>
+            </div>
+
           </div>
 
           {/* 3 Standalone Interactive Cards */}

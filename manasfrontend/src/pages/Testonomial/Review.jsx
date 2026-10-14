@@ -58,7 +58,7 @@ const Review = () => {
             <div className="container px-4 mx-auto">
                 <div className="flex justify-center text-center mb-6 lg:mb-12">
                     <div className="max-w-lg">
-                        <h2 className="text-3xl leading-none md:text-[45px] font-bold mb-6">
+                        <h2 className="text-3xl font-serif leading-none md:text-[45px] font-bold mb-6">
                             Community Reviews
                         </h2>
                         <p>Assumenda non repellendus distinctio nihil dicta sapiente, quibusdam maiores, illum at qui.</p>
@@ -82,7 +82,7 @@ const Review = () => {
                             <div className="col-span-12 md:col-span-6 ezy__testimonial15-content text-center md:text-start">
                                 <div className="flex flex-col justify-center h-full">
                                     <Rating rating={rating} showLabel={false} />
-                                    <h4 className="text-2xl font-medium mb-1">{author.fullName}</h4>
+                                    <h4 className="text-2xl font-serif font-medium mb-1">{author.fullName}</h4>
                                     <p className="mb-6">{author.designation}</p>
                                     <p className="opacity-75">{description}</p>
 

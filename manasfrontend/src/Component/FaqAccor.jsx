@@ -47,7 +47,7 @@ const FaqSection = () => {
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         {/* FAQ Text Section */}
         <div className="w-full text-center">
-          <h1 className="text-3xl font-semibold mb-4 text-gray-800">
+          <h1 className="text-3xl font-serif font-semibold mb-4 text-gray-800">
             Frequently Asked Questions <span>(FAQ's)</span>
           </h1>
           <p className="text-lg text-gray-600 mb-8">
@@ -62,7 +62,7 @@ const FaqSection = () => {
                   className="w-full flex justify-between items-center py-4 "
                   onClick={() => toggleAccordion(index)}
                 >
-                  <span className="text-lg font-semibold text-gray-800">
+                  <span className="text-lg font-serif font-semibold text-gray-800">
                     {faq.question}
                   </span>
                   <span className="text-xl text-[#4A6F8F]">

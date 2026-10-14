@@ -6,7 +6,7 @@ const BlueBtn = ({ text, to }) => {
     <Link
       to={to}
       target="_blank"
-      className="relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-500 ease-in-out bg-[#4f6f8f] rounded-full shadow-lg hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-[#4f6f8f] overflow-hidden group"
+      className="relative inline-flex items-center justify-center px-8 py-4 font-serif font-bold text-white transition-all duration-500 ease-in-out bg-[#4f6f8f] rounded-full shadow-lg hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-[#4f6f8f] overflow-hidden group"
     >
       {/* Outer Border Effect on Hover */}
       <span

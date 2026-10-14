@@ -123,7 +123,7 @@ const Cases = () => {
 
                   {/* Frosted Bottom Container with Smooth Color Reveal */}
                   <div className="bg-white/60 backdrop-blur-md px-4 pb-5 pt-1 text-center flex-1 flex flex-col items-center justify-center">
-                    <h3 className="text-base sm:text-lg font-bold transition-colors duration-300">
+                    <h3 className="text-base sm:text-lg font-serif font-bold transition-colors duration-300">
                       <span className="text-[#112340] group-hover:hidden transition-all duration-200">
                         {caseItem.name}
                       </span>
