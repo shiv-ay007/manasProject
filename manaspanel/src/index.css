@@ -26,3 +26,20 @@
 .content-display li {
     margin-bottom: 0.5em; /* Space between list items */
 }
+
+/* Modern Quill Editor Styling */
+.ql-container.ql-snow {
+  border: none !important;
+  font-family: inherit !important;
+  font-size: 15px !important;
+}
+
+.ql-editor {
+  min-height: 260px;
+  font-family: inherit !important;
+}
+
+.ql-editor.ql-blank::before {
+  color: #94A3B8 !important;
+  font-style: normal !important;
+}

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import HomeLayout from '../Component/HomeLayout';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 // import { getSections, modelOpen } from '../../Redux/Slices/dynamicSlice';
@@ -111,8 +110,7 @@ const WebsiteDetails = () => {
   };
 
   return (
-    <HomeLayout>
-      <div className="container mx-auto p-4 ">
+    <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
         <h1 className="text-2xl font-bold mb-4">
           Content Manager Related To {name.toUpperCase()}
         </h1>
@@ -140,7 +138,6 @@ const WebsiteDetails = () => {
           <TextEditor onClose={()=>closeModal()}    initialData={preData} page={name} /> // Pass the close function as prop
         )}
       </div>
-    </HomeLayout>
   );
 };
 
