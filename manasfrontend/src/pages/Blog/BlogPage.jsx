@@ -34,6 +34,8 @@ const BlogPage = () => {
     AOS.init();
   }, []);
 
+  console.log("blog page")
+
   useEffect(() => {
     dispatch(getSections());
   }, [dispatch]);
