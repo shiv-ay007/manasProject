@@ -1,0 +1,5 @@
+Frontend/node_modules
+AdminPanel/node_modules
+Backend/node_modules
+Backend/.env
+*.zip
