@@ -9,7 +9,7 @@ import './index.css';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}> {/* Wrap the app with the Provider */}
-      <BrowserRouter basename="/admin">
+      <BrowserRouter>
         <App />
       </BrowserRouter>
     </Provider>
