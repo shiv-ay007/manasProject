@@ -60,7 +60,15 @@ const Dashboard = () => {
     (item) => item?.createdAt && item.createdAt.startsWith(todayDateStr)
   ).length;
 
-  const recentInquiries = inquiryList.slice(0, 5);
+  // Sort latest first (newest to oldest)
+  const sortedInquiries = [...inquiryList].sort((a, b) => {
+    const dateA = new Date(a.createdAt || a.updatedAt || 0).getTime();
+    const dateB = new Date(b.createdAt || b.updatedAt || 0).getTime();
+    if (dateB !== dateA) return dateB - dateA;
+    return String(b._id || '').localeCompare(String(a._id || ''));
+  });
+
+  const recentInquiries = sortedInquiries.slice(0, 5);
 
   const truncateText = (text, maxLength = 40) => {
     if (!text) return '-';
