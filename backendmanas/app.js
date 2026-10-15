@@ -3,6 +3,8 @@ import { config } from "dotenv";
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
+import path from "path";
+import { fileURLToPath } from "url";
 import errorMiddleware from "./middleware/error.middleware.js";
 import multer from "multer";
 import dynamicRoute from "./routes/common.routes.js";
@@ -14,8 +16,15 @@ import { addQuotes } from "./controller/inquiry.controller.js";
 import { getVisitorCount } from "./controller/vistor.controller.js";
 config();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Initialize Express app
 const app = express();
+
+// Configure EJS view engine
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
 // Multer setup for file uploads
 const upload = multer({ dest: "uploads/" });
@@ -94,10 +103,19 @@ app.get("/test", (req, res) => {
   });
 });
 
-// Default route
+// Default route - Render animated status UI
 app.get("/", (req, res) => {
-  res.status(200).json({
-    message: "Server is running and ready.",
+  const uptimeSeconds = Math.floor(process.uptime());
+  const hours = Math.floor(uptimeSeconds / 3600);
+  const minutes = Math.floor((uptimeSeconds % 3600) / 60);
+  const seconds = uptimeSeconds % 60;
+  const uptimeStr = `${hours}h ${minutes}m ${seconds}s`;
+
+  res.render("index", {
+    title: "Dr. Manas Aggarwal | Backend Live",
+    status: "Active (200 OK)",
+    nodeEnv: process.env.NODE_ENV || "development",
+    uptime: uptimeStr,
   });
 });
 
