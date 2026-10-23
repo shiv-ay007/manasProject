@@ -1,0 +1,319 @@
+import React, { useEffect, useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteSections, getSections } from '../redux/slices/dynamicSlice';
+import {
+  FaPlus,
+  FaEdit,
+  FaTrashAlt,
+  FaEye,
+  FaSearch,
+  FaBriefcaseMedical,
+  FaImage,
+  FaSyncAlt,
+  FaTimes
+} from 'react-icons/fa';
+
+const CaseView = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { sections = [], loading } = useSelector((state) => state.dynamic);
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCase, setSelectedCase] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(null);
+
+  const fetchCases = () => {
+    dispatch(getSections('Cases'));
+  };
+
+  useEffect(() => {
+    fetchCases();
+  }, [dispatch]);
+
+  const handleAddNew = () => {
+    navigate('/case/add', { state: { initialData: {} } });
+  };
+
+  const handleEdit = (caseItem) => {
+    navigate('/case/add', {
+      state: {
+        initialData: {
+          id: caseItem?._id,
+          title: caseItem?.title,
+          content: caseItem?.description,
+          attachment: caseItem?.photo?.secure_url || null,
+        },
+      },
+    });
+  };
+
+  const handleDelete = async (id, title) => {
+    const isConfirm = window.confirm(`Are you sure you want to delete case "${title || 'this case'}"?`);
+    if (isConfirm) {
+      setIsDeleting(id);
+      try {
+        await dispatch(deleteSections(id));
+        fetchCases();
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsDeleting(null);
+      }
+    }
+  };
+
+  // Filter and sort cases so latest shows first
+  const filteredCases = Array.isArray(sections)
+    ? [...sections]
+        .filter((c) => {
+          if (!searchTerm.trim()) return true;
+          const q = searchTerm.toLowerCase();
+          return (
+            c?.title?.toLowerCase().includes(q) ||
+            c?.description?.toLowerCase().includes(q)
+          );
+        })
+        .sort((a, b) => {
+          const dateA = a?.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const dateB = b?.createdAt ? new Date(b.createdAt).getTime() : 0;
+          if (dateA && dateB && dateA !== dateB) {
+            return dateB - dateA;
+          }
+          if (a?._id && b?._id) {
+            return String(b._id).localeCompare(String(a._id));
+          }
+          return 0;
+        })
+    : [];
+
+  return (
+    <div className="w-full min-h-screen bg-[#F4F6F9] text-slate-800 pb-16">
+      
+      {/* Top Header Bar */}
+      <div className="bg-[#1E1E2D] border-b border-[#2C3146] text-white px-6 py-6 shadow-sm">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="p-1.5 rounded-lg bg-indigo-500/20 text-indigo-400 text-sm">
+                <FaBriefcaseMedical />
+              </span>
+              <span className="text-xs uppercase tracking-wider text-indigo-400 font-bold">
+                Clinical Management
+              </span>
+            </div>
+            <h1 className="text-2xl font-bold tracking-tight text-white mt-1">
+              Clinical Cases Showcase
+            </h1>
+            <p className="text-xs text-slate-400 mt-1">
+              Manage surgical cases, operative findings, and clinical documentation for the main website.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              onClick={fetchCases}
+              disabled={loading}
+              title="Refresh list"
+              className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition cursor-pointer"
+            >
+              <FaSyncAlt className={loading ? 'animate-spin' : ''} />
+            </button>
+            <button
+              onClick={handleAddNew}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-sm shadow-lg shadow-indigo-600/30 transition hover:-translate-y-0.5 cursor-pointer"
+            >
+              <FaPlus />
+              <span>Add New Case</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Content Container */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8">
+        
+        {/* Search & Filter Bar */}
+        <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-sm mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="relative w-full sm:w-96">
+            <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search by case title or procedure..."
+              className="w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition"
+            />
+          </div>
+
+          <div className="text-xs font-semibold text-slate-500 self-end sm:self-center">
+            Total Cases: <span className="text-indigo-600 font-bold">{filteredCases.length}</span>
+          </div>
+        </div>
+
+        {/* Loading State */}
+        {loading && (
+          <div className="py-20 flex flex-col items-center justify-center">
+            <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+            <p className="mt-3 text-xs font-semibold text-slate-500">Loading Clinical Cases...</p>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!loading && filteredCases.length === 0 && (
+          <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 shadow-sm max-w-lg mx-auto my-8">
+            <div className="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl mx-auto mb-4">
+              <FaBriefcaseMedical />
+            </div>
+            <h3 className="text-lg font-bold text-slate-800">No Clinical Cases Found</h3>
+            <p className="text-xs text-slate-500 mt-1 mb-6">
+              {searchTerm ? 'No cases match your search query.' : 'You haven’t added any clinical cases yet.'}
+            </p>
+            <button
+              onClick={handleAddNew}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-semibold text-xs shadow-md hover:bg-indigo-700 transition"
+            >
+              <FaPlus />
+              <span>Add First Case</span>
+            </button>
+          </div>
+        )}
+
+        {/* Cases Grid */}
+        {!loading && filteredCases.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {filteredCases.map((caseItem, idx) => (
+              <div
+                key={caseItem._id || idx}
+                className="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col group"
+              >
+                {/* Thumbnail Image */}
+                <div className="relative h-48 bg-slate-900 overflow-hidden">
+                  {caseItem.photo?.secure_url ? (
+                    <img
+                      src={caseItem.photo.secure_url}
+                      alt={caseItem.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 bg-slate-800">
+                      <FaImage className="text-3xl mb-1 opacity-50" />
+                      <span className="text-xs">No Photo Uploaded</span>
+                    </div>
+                  )}
+                  <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5">
+                    <span className="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[10px] font-bold">
+                      Case #{idx + 1}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Card Body */}
+                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-base font-bold text-slate-800 group-hover:text-indigo-600 transition-colors line-clamp-1">
+                      {caseItem.title}
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-2 line-clamp-3 leading-relaxed">
+                      {caseItem.description ? caseItem.description.replace(/<[^>]*>/g, '') : 'No description provided.'}
+                    </p>
+                  </div>
+
+                  {/* Actions Footer */}
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                    <button
+                      onClick={() => setSelectedCase(caseItem)}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-indigo-600 transition"
+                    >
+                      <FaEye className="text-xs" />
+                      <span>Quick View</span>
+                    </button>
+
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={() => handleEdit(caseItem)}
+                        title="Edit Case"
+                        className="p-2 rounded-lg bg-slate-100 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 transition cursor-pointer"
+                      >
+                        <FaEdit className="text-xs" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(caseItem._id, caseItem.title)}
+                        disabled={isDeleting === caseItem._id}
+                        title="Delete Case"
+                        className="p-2 rounded-lg bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-600 transition cursor-pointer disabled:opacity-50"
+                      >
+                        <FaTrashAlt className="text-xs" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+      </div>
+
+      {/* Quick View Modal */}
+      {selectedCase && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 p-6 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h3 className="text-base font-bold text-slate-800">{selectedCase.title}</h3>
+              <button
+                onClick={() => setSelectedCase(null)}
+                className="p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition"
+              >
+                <FaTimes />
+              </button>
+            </div>
+
+            {selectedCase.photo?.secure_url && (
+              <div className="rounded-2xl overflow-hidden my-4 bg-slate-900 border border-slate-100">
+                <img
+                  src={selectedCase.photo.secure_url}
+                  alt={selectedCase.title}
+                  className="w-full max-h-72 object-cover"
+                />
+              </div>
+            )}
+
+            <div className="mt-3">
+              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+                Findings &amp; Notes
+              </h4>
+              <div
+                className="text-xs text-slate-600 leading-relaxed space-y-2"
+                dangerouslySetInnerHTML={{ __html: selectedCase.description || 'No description provided.' }}
+              />
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-slate-100 flex justify-end gap-2">
+              <button
+                onClick={() => {
+                  const c = selectedCase;
+                  setSelectedCase(null);
+                  handleEdit(c);
+                }}
+                className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex items-center gap-1.5"
+              >
+                <FaEdit />
+                <span>Edit This Case</span>
+              </button>
+              <button
+                onClick={() => setSelectedCase(null)}
+                className="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-bold transition"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+    </div>
+  );
+};
+
+export default CaseView;

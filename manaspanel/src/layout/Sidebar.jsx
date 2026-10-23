@@ -7,7 +7,7 @@ import {
   MdKeyboardArrowDown
 } from 'react-icons/md';
 import { GiMagnifyingGlass } from 'react-icons/gi';
-import { FaUserMd } from 'react-icons/fa';
+import { FaUserMd, FaBriefcaseMedical } from 'react-icons/fa';
 import logo from '../assets/logo.png';
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
@@ -15,10 +15,16 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const [isBlogOpen, setIsBlogOpen] = useState(
     location.pathname.startsWith('/blog')
   );
+  const [isCaseOpen, setIsCaseOpen] = useState(
+    location.pathname.startsWith('/case')
+  );
 
   useEffect(() => {
     if (location.pathname.startsWith('/blog')) {
       setIsBlogOpen(true);
+    }
+    if (location.pathname.startsWith('/case')) {
+      setIsCaseOpen(true);
     }
   }, [location.pathname]);
 
@@ -41,6 +47,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       setIsBlogOpen(true);
     } else {
       setIsBlogOpen(!isBlogOpen);
+    }
+  };
+
+  const handleCaseClick = () => {
+    if (!isOpen) {
+      setIsOpen(true);
+      setIsCaseOpen(true);
+    } else {
+      setIsCaseOpen(!isCaseOpen);
     }
   };
 
@@ -188,6 +203,60 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 >
                   <MdOutlineDescription className="text-lg shrink-0" />
                   <span>View Blog</span>
+                </NavLink>
+              </div>
+            )}
+          </div>
+
+          {/* Clinical Cases Section */}
+          <div>
+            <button
+              onClick={handleCaseClick}
+              title={!isOpen ? 'Clinical Cases' : ''}
+              className={`${
+                isOpen ? expandedListStyle : collapsedListStyle
+              } justify-between cursor-pointer`}
+            >
+              <div className="flex items-center gap-3.5">
+                <FaBriefcaseMedical className="text-2xl group-hover:scale-110 transition-transform shrink-0 text-emerald-400" />
+                {isOpen && <span>Clinical Cases</span>}
+              </div>
+              {isOpen && (
+                <MdKeyboardArrowDown
+                  className={`text-xl transition-transform duration-200 ${
+                    isCaseOpen ? 'rotate-180 text-indigo-400' : 'text-slate-400'
+                  }`}
+                />
+              )}
+            </button>
+
+            {/* Submenu (only visible when expanded) */}
+            {isOpen && isCaseOpen && (
+              <div className="pl-4 pr-1 mt-1 space-y-1 border-l-2 border-emerald-500/30 ml-4">
+                <NavLink
+                  to="/case/add"
+                  onClick={() => {
+                    if (window.innerWidth < 768) setIsOpen(false);
+                  }}
+                  className={({ isActive }) =>
+                    isActive ? expandedActiveStyle : expandedListStyle
+                  }
+                >
+                  <MdAdd className="text-lg shrink-0" />
+                  <span>Add Case</span>
+                </NavLink>
+
+                <NavLink
+                  to="/case/list"
+                  onClick={() => {
+                    if (window.innerWidth < 768) setIsOpen(false);
+                  }}
+                  className={({ isActive }) =>
+                    isActive ? expandedActiveStyle : expandedListStyle
+                  }
+                >
+                  <FaBriefcaseMedical className="text-base shrink-0" />
+                  <span>View All Cases</span>
                 </NavLink>
               </div>
             )}

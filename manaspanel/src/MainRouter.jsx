@@ -10,6 +10,8 @@ import InquiryDetail from './Pages/InquiryDetail';
 import BlogAdd from './Pages/BlogAdd';
 import BlogView from './Pages/BlogView';
 import BlogDetail from './Pages/BlogDetail';
+import CaseAdd from './Pages/CaseAdd';
+import CaseView from './Pages/CaseView';
 import LoginForm from './Pages/LoginForm';
 
 const MainRouter = () => {
@@ -36,6 +38,8 @@ const MainRouter = () => {
         <Route path="/blog/add" element={<BlogAdd />} />
         <Route path="/blog/list" element={<BlogView />} />
         <Route path="/blog/detail" element={<BlogDetail />} />
+        <Route path="/case/add" element={<CaseAdd />} />
+        <Route path="/case/list" element={<CaseView />} />
         <Route path="/inquiry" element={<Inquiry />} />
         <Route path="/inquiry/detail" element={<InquiryDetail />} />
       </Route>

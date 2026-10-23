@@ -7,6 +7,7 @@ const initialState = {
   error: null,
   dynamicPage: [],
   sections: [],
+  cases: [],
   specificSection: [],
   inquiryList: [],
   vendorList:[],
@@ -33,18 +34,23 @@ export const getSections = createAsyncThunk(
   "discounts/section",
   async (name, { rejectWithValue }) => {
     try {
-
-
-      const response = await axiosInstance1.get(`/dynamic/${"Blog"}`);
-
-
-    
-    
-      
+      const pageToFetch = name || "Blog";
+      const response = await axiosInstance1.get("/dynamic/" + pageToFetch);
       return response.data.sections;
     } catch (error) {
-      // toast.error(error?.response?.data?.message || "Failed to add discount");
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
+
+export const getCases = createAsyncThunk(
+  "discounts/cases",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance1.get("/dynamic/Cases");
+      return response.data.sections;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
     }
   }
 );
@@ -276,12 +282,32 @@ const parentSlice = createSlice({
         state.dynamicPage = action?.payload?.data;
       })
       .addCase(getSections.fulfilled, (state, action) => {
-
-
         state.loading = false;
-
-        
-        state.sections = action?.payload
+        state.sections = action?.payload;
+      })
+      .addCase(getCases.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getCases.fulfilled, (state, action) => {
+        state.loading = false;
+        const fetchedCases = Array.isArray(action?.payload) ? [...action.payload] : [];
+        fetchedCases.sort((a, b) => {
+          const dateA = a?.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const dateB = b?.createdAt ? new Date(b.createdAt).getTime() : 0;
+          if (dateA && dateB && dateA !== dateB) {
+            return dateB - dateA;
+          }
+          if (a?._id && b?._id) {
+            return String(b._id).localeCompare(String(a._id));
+          }
+          return 0;
+        });
+        state.cases = fetchedCases;
+      })
+      .addCase(getCases.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       })
       .addCase(getSpecificSection.fulfilled, (state, action) => {
 
