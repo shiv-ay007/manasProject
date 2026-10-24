@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { IoMdArrowDropdown, IoMdArrowDropright } from 'react-icons/io';
-import { Link, useLocation, NavLink } from 'react-router-dom';
+import { IoMdArrowDropdown } from 'react-icons/io';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo1.png';
 import { FiMenu, FiX, FiMinus, FiPlus, FiPhoneCall } from 'react-icons/fi';
 import BookApointement from '../Component/BookApointement';
@@ -13,7 +13,7 @@ const Header = () => {
   const [scrolled, setScrolled] = useState(false);
 
   const location = useLocation();
-  const isHome = location.pathname === '/';
+  const navigate = useNavigate();
 
   /* ---------- Scroll shadow effect ---------- */
   useEffect(() => {
@@ -244,9 +244,7 @@ const Header = () => {
     { name: 'Contact Us', path: '/contact' },
   ];
 
-  /* ---------- Desktop link class ---------- */
-  const isTransparent = false;
-
+  /* ---------- Link class helper (hover underline REMOVED) ---------- */
   const linkClass = (path) => {
     const active =
       path === '/'
@@ -255,22 +253,28 @@ const Header = () => {
 
     const textColor = 'text-gray-800 hover:text-teal-700';
     const activeColor = 'text-teal-700 font-semibold';
-    const underlineColor = 'after:bg-teal-600';
 
     return `relative px-3 py-2 text-[0.95rem] font-medium tracking-wide rounded-md transition-colors duration-300
       ${active ? activeColor : textColor}
       after:content-[''] after:absolute after:left-3 after:right-3 after:-bottom-0.5 after:h-[2px]
-      ${underlineColor} after:rounded-full after:origin-left after:scale-x-0
-      hover:after:scale-x-100 after:transition-transform after:duration-300
-      ${active ? 'after:scale-x-100' : ''}`;
+      after:bg-teal-600 after:rounded-full after:transition-transform after:duration-300
+      ${active ? 'after:scale-x-100' : 'after:scale-x-0'}`;
   };
 
   const isTreatmentsActive = location.pathname.startsWith('/treatment');
 
-  const handleLinkClick = () => {
+  /* ---------- MAIN handleLinkClick ---------- */
+  const handleLinkClick = (e, path) => {
+    if (e) e.preventDefault();
+
     setActiveDropdown(null);
     setActiveSubDropdown(null);
+    setOpenDropdownMobile(null);
     setIsOpen(false);
+
+    if (path) {
+      setTimeout(() => navigate(path), 60);
+    }
   };
 
   const toggleTreatments = () => {
@@ -335,9 +339,8 @@ const Header = () => {
                       : 'text-gray-800 hover:text-teal-700'
                   }
                   after:content-[''] after:absolute after:left-3 after:right-3 after:-bottom-0.5 after:h-[2px]
-                  after:bg-teal-600 after:rounded-full after:origin-left after:scale-x-0
-                  hover:after:scale-x-100 after:transition-transform after:duration-300
-                  ${isTreatmentsActive ? 'after:scale-x-100' : ''}`}
+                  after:bg-teal-600 after:rounded-full after:transition-transform after:duration-300
+                  ${isTreatmentsActive ? 'after:scale-x-100' : 'after:scale-x-0'}`}
               >
                 Our Treatments
                 <IoMdArrowDropdown
@@ -349,15 +352,11 @@ const Header = () => {
 
               {activeDropdown === 'treatments' && (
                 <div className="absolute left-1/2 -translate-x-[36%] top-full z-50 animate-[fadeIn_0.2s_ease-out] w-[860px] max-w-[95vw]">
-                  {/* Invisible hover bridge (prevents closing when moving mouse from button to dropdown) */}
                   <div className="h-3 w-full" />
-
                   <div className="bg-white shadow-2xl rounded-2xl border border-teal-100 overflow-hidden">
-                    {/* 4-Column Mega Grid */}
                     <div className="grid grid-cols-4 gap-5 p-6 bg-white">
                       {treatmentGroups.map((group) => (
                         <div key={group.title} className="flex flex-col space-y-4">
-                          {/* Group Header */}
                           <div className="border-b border-teal-100 pb-2">
                             <span className="text-[10px] font-bold text-[#00B771] uppercase tracking-wider block">
                               {group.badge}
@@ -367,7 +366,6 @@ const Header = () => {
                             </h4>
                           </div>
 
-                          {/* Categories within this group */}
                           <div className="space-y-4">
                             {group.categories.map((cat) => (
                               <div key={cat.name}>
@@ -379,7 +377,7 @@ const Header = () => {
                                     <Link
                                       key={item.name}
                                       to={item.path}
-                                      onClick={handleLinkClick}
+                                      onClick={(e) => handleLinkClick(e, item.path)}
                                       className="group flex items-center gap-1.5 py-0.5 text-[0.82rem] text-gray-600 hover:text-[#00B771] transition-colors"
                                     >
                                       <span className="w-1.5 h-1.5 rounded-full bg-teal-300 group-hover:bg-[#00B771] group-hover:scale-125 transition-all shrink-0" />
@@ -396,7 +394,6 @@ const Header = () => {
                       ))}
                     </div>
 
-                    {/* Bottom Assistance Banner */}
                     <div className="px-6 py-3 bg-gradient-to-r from-teal-50 via-emerald-50/70 to-teal-50 border-t border-teal-100/80 flex items-center justify-between text-xs text-teal-900">
                       <div className="flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-[#00B771]" />
@@ -406,13 +403,12 @@ const Header = () => {
                       </div>
                       <Link
                         to="/contact"
-                        onClick={handleLinkClick}
+                        onClick={(e) => handleLinkClick(e, '/contact')}
                         className="font-bold text-teal-700 hover:text-teal-900 underline underline-offset-2 flex items-center gap-1"
                       >
                         Need guidance? Contact us →
                       </Link>
                     </div>
-
                   </div>
                 </div>
               )}
@@ -431,17 +427,11 @@ const Header = () => {
                   type="button"
                   className="group relative inline-flex items-center gap-2.5 px-5 py-2.5 text-[0.88rem] font-serif font-semibold text-white tracking-wide rounded-full overflow-hidden transition-all duration-300 bg-gradient-to-r from-[#1495be] via-[#1CB6E6] to-[#0ea5e9] hover:from-[#18a2cd] hover:via-[#30c0ec] hover:to-[#1CB6E6] shadow-[0_4px_16px_rgba(28,182,230,0.38)] hover:shadow-[0_6px_24px_rgba(28,182,230,0.55)] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] border border-white/30 cursor-pointer"
                 >
-                  {/* Shimmer sweep animation */}
                   <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out pointer-events-none" />
-
-                  {/* Icon with illuminated circle */}
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-white/25 text-white shadow-inner group-hover:scale-110 group-hover:bg-white group-hover:text-[#1495be] group-hover:rotate-12 transition-all duration-300 shrink-0">
                     <FiPhoneCall className="text-[11px]" />
                   </span>
-
                   <span className="whitespace-nowrap font-medium">Request a Callback</span>
-
-                  {/* Subtle chevron */}
                   <span className="text-white/80 group-hover:text-white group-hover:translate-x-0.5 transition-all duration-300 text-xs shrink-0">
                     →
                   </span>
@@ -450,7 +440,7 @@ const Header = () => {
             </div>
           </nav>
 
-          {/* Mobile menu button */}
+          {/* Mobile menu open button */}
           <button
             onClick={() => setIsOpen(true)}
             aria-label="Open Menu"
@@ -462,6 +452,7 @@ const Header = () => {
 
         {/* ================= MOBILE DRAWER ================= */}
         <div
+          onClick={(e) => e.stopPropagation()}
           className={`fixed left-0 top-0 h-full w-[85%] max-w-[340px] bg-white z-50 shadow-2xl
             transition-transform duration-300 ease-out lg:hidden flex flex-col
             ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
@@ -482,48 +473,35 @@ const Header = () => {
 
           {/* Drawer links */}
           <div className="flex-1 overflow-y-auto px-5 py-4 space-y-1 text-[0.95rem] font-medium text-gray-700">
-            <NavLink
-              to="/"
-              onClick={handleLinkClick}
-              className={({ isActive }) =>
-                `block px-3 py-2.5 rounded-lg transition-colors duration-200
-                 ${
-                   isActive
-                     ? 'bg-teal-50 text-teal-700'
-                     : 'hover:bg-teal-50 hover:text-teal-700'
-                 }`
-              }
+
+            {/* Home */}
+            <button
+              onClick={(e) => handleLinkClick(e, '/')}
+              className="block w-full text-left px-3 py-2.5 rounded-lg transition-colors duration-200 hover:bg-teal-50 hover:text-teal-700"
             >
               Home
-            </NavLink>
+            </button>
 
-            <NavLink
-              to="/about-dr-manas-aggarwal"
-              onClick={handleLinkClick}
-              className={({ isActive }) =>
-                `block px-3 py-2.5 rounded-lg transition-colors duration-200
-                 ${
-                   isActive
-                     ? 'bg-teal-50 text-teal-700'
-                     : 'hover:bg-teal-50 hover:text-teal-700'
-                 }`
-              }
+            {/* About Us */}
+            <button
+              onClick={(e) => handleLinkClick(e, '/about-dr-manas-aggarwal')}
+              className="block w-full text-left px-3 py-2.5 rounded-lg transition-colors duration-200 hover:bg-teal-50 hover:text-teal-700"
             >
               About Us
-            </NavLink>
+            </button>
 
-            {/* Treatments accordion (mobile) */}
+            {/* Treatments accordion (MOBILE) */}
             <div>
               <button
                 onClick={() =>
-                  setActiveDropdown(
-                    activeDropdown === 'treatments' ? null : 'treatments'
+                  setOpenDropdownMobile(
+                    openDropdownMobile === 'treatments' ? null : 'treatments'
                   )
                 }
                 className={`flex items-center justify-between w-full px-3 py-2.5 rounded-lg !font-poppins font-medium
                   transition-colors duration-200
                   ${
-                    activeDropdown === 'treatments'
+                    openDropdownMobile === 'treatments'
                       ? 'bg-teal-50 text-teal-700'
                       : 'hover:bg-teal-50 hover:text-teal-700'
                   }`}
@@ -531,12 +509,12 @@ const Header = () => {
                 <span>Our Treatments</span>
                 <IoMdArrowDropdown
                   className={`transition-transform duration-300 ${
-                    activeDropdown === 'treatments' ? 'rotate-180' : ''
+                    openDropdownMobile === 'treatments' ? 'rotate-180' : ''
                   }`}
                 />
               </button>
 
-              {activeDropdown === 'treatments' && (
+              {openDropdownMobile === 'treatments' && (
                 <div className="mt-1 ml-2 space-y-0.5 border-l-2 border-teal-100 pl-2">
                   {treatments.map((treatment, index) => (
                     <div key={treatment.name}>
@@ -544,8 +522,8 @@ const Header = () => {
                         <>
                           <button
                             onClick={() =>
-                              setOpenDropdownMobile(
-                                openDropdownMobile === index ? null : index
+                              setActiveSubDropdown(
+                                activeSubDropdown === index ? null : index
                               )
                             }
                             className="w-full flex items-center justify-between px-3 py-2 rounded-lg
@@ -553,50 +531,34 @@ const Header = () => {
                                        transition-colors duration-200"
                           >
                             <span>{treatment.name}</span>
-                            {openDropdownMobile === index ? (
+                            {activeSubDropdown === index ? (
                               <FiMinus className="text-teal-600" />
                             ) : (
                               <FiPlus className="text-teal-600" />
                             )}
                           </button>
 
-                          {openDropdownMobile === index && (
+                          {activeSubDropdown === index && (
                             <div className="ml-4 mt-1 space-y-0.5 border-l border-teal-100 pl-3">
                               {treatment.subItems.map((subItem) => (
-                                <NavLink
+                                <button
                                   key={subItem.path}
-                                  to={subItem.path}
-                                  onClick={handleLinkClick}
-                                  className={({ isActive }) =>
-                                    `block px-2.5 py-1.5 text-[0.85rem] rounded-md transition-colors
-                                     ${
-                                       isActive
-                                         ? 'text-teal-700 bg-teal-50'
-                                         : 'text-gray-600 hover:text-teal-700 hover:bg-teal-50'
-                                     }`
-                                  }
+                                  onClick={(e) => handleLinkClick(e, subItem.path)}
+                                  className="block w-full text-left px-2.5 py-1.5 text-[0.85rem] rounded-md transition-colors text-gray-600 hover:text-teal-700 hover:bg-teal-50"
                                 >
                                   {subItem.name}
-                                </NavLink>
+                                </button>
                               ))}
                             </div>
                           )}
                         </>
                       ) : (
-                        <NavLink
-                          to={treatment.path}
-                          onClick={handleLinkClick}
-                          className={({ isActive }) =>
-                            `block px-3 py-2 rounded-lg text-sm transition-colors duration-200
-                             ${
-                               isActive
-                                 ? 'text-teal-700 bg-teal-50'
-                                 : 'text-gray-700 hover:bg-teal-50 hover:text-teal-700'
-                             }`
-                          }
+                        <button
+                          onClick={(e) => handleLinkClick(e, treatment.path)}
+                          className="block w-full text-left px-3 py-2 rounded-lg text-sm transition-colors duration-200 text-gray-700 hover:bg-teal-50 hover:text-teal-700"
                         >
                           {treatment.name}
-                        </NavLink>
+                        </button>
                       )}
                     </div>
                   ))}
@@ -604,50 +566,29 @@ const Header = () => {
               )}
             </div>
 
-            <NavLink
-              to="/cases"
-              onClick={handleLinkClick}
-              className={({ isActive }) =>
-                `block px-3 py-2.5 rounded-lg transition-colors duration-200
-                 ${
-                   isActive
-                     ? 'bg-teal-50 text-teal-700'
-                     : 'hover:bg-teal-50 hover:text-teal-700'
-                 }`
-              }
+            {/* Cases */}
+            <button
+              onClick={(e) => handleLinkClick(e, '/cases')}
+              className="block w-full text-left px-3 py-2.5 rounded-lg transition-colors duration-200 hover:bg-teal-50 hover:text-teal-700"
             >
               Cases
-            </NavLink>
+            </button>
 
-            <NavLink
-              to="/blog"
-              onClick={handleLinkClick}
-              className={({ isActive }) =>
-                `block px-3 py-2.5 rounded-lg transition-colors duration-200
-                 ${
-                   isActive
-                     ? 'bg-teal-50 text-teal-700'
-                     : 'hover:bg-teal-50 hover:text-teal-700'
-                 }`
-              }
+            {/* Blogs */}
+            <button
+              onClick={(e) => handleLinkClick(e, '/blog')}
+              className="block w-full text-left px-3 py-2.5 rounded-lg transition-colors duration-200 hover:bg-teal-50 hover:text-teal-700"
             >
               Blogs
-            </NavLink>
+            </button>
 
-            <NavLink
-              to="/contact"
-              onClick={handleLinkClick}
-              className={({ isActive }) =>
-                `block px-3 py-2.5 rounded-lg transition-colors duration-200
-                 ${
-                   isActive
-                     ? 'bg-teal-50 text-teal-700'
-                     : 'hover:bg-teal-50 hover:text-teal-700'
-                 }`
-              }
+            {/* Contact Us */}
+            <button
+              onClick={(e) => handleLinkClick(e, '/contact')}
+              className="block w-full text-left px-3 py-2.5 rounded-lg transition-colors duration-200 hover:bg-teal-50 hover:text-teal-700"
             >
               Contact Us
-            </NavLink>
+            </button>
           </div>
 
           {/* Drawer footer CTA */}

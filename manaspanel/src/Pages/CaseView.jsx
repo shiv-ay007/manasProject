@@ -90,38 +90,38 @@ const CaseView = () => {
   return (
     <div className="w-full min-h-screen bg-[#F4F6F9] text-slate-800 pb-16">
       
-      {/* Top Header Bar */}
-      <div className="bg-[#1E1E2D] border-b border-[#2C3146] text-white px-6 py-6 shadow-sm">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      {/* Top Header Bar - Slim */}
+      <div className="bg-[#1E1E2D] border-b border-[#2C3146] text-white px-6 py-3 shadow-sm">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <span className="p-1.5 rounded-lg bg-indigo-500/20 text-indigo-400 text-sm">
+              <span className="p-1 rounded-md bg-indigo-500/20 text-indigo-400 text-xs">
                 <FaBriefcaseMedical />
               </span>
-              <span className="text-xs uppercase tracking-wider text-indigo-400 font-bold">
+              <span className="text-[10px] uppercase tracking-wider text-indigo-400 font-bold">
                 Clinical Management
               </span>
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-white mt-1">
+            <h1 className="text-lg font-bold tracking-tight text-white mt-0.5">
               Clinical Cases Showcase
             </h1>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-[11px] text-slate-400 mt-0.5">
               Manage surgical cases, operative findings, and clinical documentation for the main website.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <button
               onClick={fetchCases}
               disabled={loading}
               title="Refresh list"
-              className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition cursor-pointer"
+              className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition cursor-pointer"
             >
               <FaSyncAlt className={loading ? 'animate-spin' : ''} />
             </button>
             <button
               onClick={handleAddNew}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-sm shadow-lg shadow-indigo-600/30 transition hover:-translate-y-0.5 cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs shadow-md shadow-indigo-600/30 transition hover:-translate-y-0.5 cursor-pointer"
             >
               <FaPlus />
               <span>Add New Case</span>

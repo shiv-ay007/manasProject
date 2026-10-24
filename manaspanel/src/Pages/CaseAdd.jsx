@@ -332,6 +332,43 @@ const CaseAdd = ({ onClose }) => {
 
           </div>
 
+          {/* Bottom Action Bar - Publish Button */}
+          <div className="lg:col-span-12">
+            <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div className="text-xs sm:text-sm font-semibold text-slate-500 text-center sm:text-left">
+                {isEditing
+                  ? 'Review your changes and update the clinical case.'
+                  : 'Review the details above and publish this clinical case to the website.'}
+              </div>
+              <div className="flex items-center gap-2.5 w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  className="flex-1 sm:flex-none px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 text-sm font-medium transition cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-sm shadow-lg shadow-indigo-600/30 transition hover:-translate-y-0.5 cursor-pointer disabled:opacity-50"
+                >
+                  {loading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Saving...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FaSave />
+                      <span>{isEditing ? 'Update Case' : 'Publish Case'}</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+{/* here is the commnet on button to submit */}
         </form>
 
       </div>

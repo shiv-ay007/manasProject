@@ -135,21 +135,22 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
+    <div className="space-y-6 max-w-7xl mx-auto pb-10 px-2 sm:px-4">
+      
       {/* Top Banner / Welcome Action Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-4 md:p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white/80 backdrop-blur-md p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm">
         <div>
-          <h2 className="text-lg md:text-xl font-bold text-slate-800 tracking-tight">
+          <h2 className="text-xl md:text-2xl font-extrabold text-slate-800 tracking-tight">
             Clinic Overview & Analytics
           </h2>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs md:text-sm text-slate-500 mt-1">
             Real-time summary of patient inquiries, articles, and clinic activity
           </p>
         </div>
 
         <div className="flex items-center gap-2.5">
           {/* Live Date Pill */}
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-600">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-600 shadow-sm">
             <FaCalendarAlt className="text-indigo-600" />
             <span>
               {new Date().toLocaleDateString('en-US', {
@@ -165,168 +166,171 @@ const Dashboard = () => {
           <button
             onClick={fetchData}
             disabled={refreshing}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-xl text-xs font-semibold transition cursor-pointer"
+            className="flex items-center gap-2 px-4 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-100 rounded-xl text-xs font-bold transition-all active:scale-95 disabled:opacity-70"
             title="Refresh statistics"
           >
-            <FaSyncAlt className={refreshing ? 'animate-spin' : ''} />
+            <FaSyncAlt className={`text-[13px] ${refreshing ? 'animate-spin' : ''}`} />
             <span>Refresh</span>
           </button>
         </div>
       </div>
 
       {/* Compact & Colorful 4-Card Grid */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        
         {/* Card 1: Total Inquiries (Vibrant Blue/Indigo) */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-700 text-white p-4 rounded-2xl shadow-md shadow-blue-500/20 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group">
-          <div className="flex items-center justify-between">
-            <div className="w-11 h-11 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white shadow-inner">
+        <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-700 text-white p-5 rounded-2xl shadow-lg shadow-blue-500/20 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+          <div className="absolute top-0 right-0 -mr-4 -mt-4 w-24 h-24 bg-white/10 rounded-full blur-xl group-hover:bg-white/20 transition-all"></div>
+          <div className="flex items-center justify-between relative z-10">
+            <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white shadow-inner group-hover:scale-110 transition-transform">
               <FaInbox className="text-xl" />
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full">
+            <span className="text-[10px] font-bold uppercase tracking-wider bg-white/20 px-2.5 py-1 rounded-full">
               Queries
             </span>
           </div>
-          <div className="mt-3">
+          <div className="mt-4 relative z-10">
             <p className="text-xs font-medium text-blue-100">Total Inquiries</p>
-            <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight mt-0.5">
+            <h3 className="text-3xl font-extrabold tracking-tight mt-1">
               {inquiryList.length}
             </h3>
           </div>
-          <div className="mt-2.5 pt-2 border-t border-white/20 flex items-center justify-between text-[11px] text-blue-100">
-            <Link to="/inquiry" className="hover:text-white font-semibold flex items-center gap-1">
+          <div className="mt-4 pt-3 border-t border-white/20 flex items-center justify-between text-[11px] text-blue-100 relative z-10">
+            <Link to="/inquiry" className="hover:text-white font-bold flex items-center gap-1 transition-colors">
               <span>View list</span>
-              <FaArrowRight className="text-[9px]" />
+              <FaArrowRight className="text-[10px] group-hover:translate-x-1 transition-transform" />
             </Link>
-            <span>All-time</span>
+            <span className="font-medium">All-time</span>
           </div>
         </div>
 
-        {/* Card 2: Total Blogs / Articles (Vibrant Emerald/Teal) */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-4 rounded-2xl shadow-md shadow-emerald-500/20 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group">
+        {/* Card 2: Total Blogs / Articles (Clean White with Emerald Accent) */}
+        <div className="relative overflow-hidden bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-emerald-200 hover:-translate-y-1 transition-all duration-300 group">
           <div className="flex items-center justify-between">
-            <div className="w-11 h-11 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white shadow-inner">
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 group-hover:rotate-6 transition-transform">
               <FaBlog className="text-xl" />
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full">
+            <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-500 px-2.5 py-1 rounded-full">
               Published
             </span>
           </div>
-          <div className="mt-3">
-            <p className="text-xs font-medium text-emerald-100">Total Articles</p>
-            <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight mt-0.5">
+          <div className="mt-4">
+            <p className="text-xs font-medium text-slate-500">Total Articles</p>
+            <h3 className="text-3xl font-extrabold text-slate-800 tracking-tight mt-1">
               {sections.length || 13}
             </h3>
           </div>
-          <div className="mt-2.5 pt-2 border-t border-white/20 flex items-center justify-between text-[11px] text-emerald-100">
-            <Link to="/blog/list" className="hover:text-white font-semibold flex items-center gap-1">
+          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
+            <Link to="/blog/list" className="text-emerald-600 hover:text-emerald-700 font-bold flex items-center gap-1 transition-colors">
               <span>Manage</span>
-              <FaArrowRight className="text-[9px]" />
+              <FaArrowRight className="text-[10px] group-hover:translate-x-1 transition-transform" />
             </Link>
-            <Link to="/blog/add" className="hover:text-white font-semibold">
-              + Add
+            <Link to="/blog/add" className="text-indigo-600 hover:text-indigo-800 font-bold">
+              + Add New
             </Link>
           </div>
         </div>
 
-        {/* Card 3: Today's Inquiries (Vibrant Amber/Orange) */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-amber-500 to-orange-600 text-white p-4 rounded-2xl shadow-md shadow-amber-500/20 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group">
+        {/* Card 3: Today's Inquiries (Clean White with Amber Accent) */}
+        <div className="relative overflow-hidden bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-amber-200 hover:-translate-y-1 transition-all duration-300 group">
           <div className="flex items-center justify-between">
-            <div className="w-11 h-11 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white shadow-inner">
+            <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500 group-hover:rotate-6 transition-transform">
               <MdOutlineMarkEmailUnread className="text-xl" />
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full">
+            <span className="text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-700 px-2.5 py-1 rounded-full">
               Today
             </span>
           </div>
-          <div className="mt-3">
-            <p className="text-xs font-medium text-amber-100">Today's Inquiries</p>
-            <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight mt-0.5">
+          <div className="mt-4">
+            <p className="text-xs font-medium text-slate-500">Today's Inquiries</p>
+            <h3 className="text-3xl font-extrabold text-slate-800 tracking-tight mt-1">
               {todayInquiriesCount > 0 ? todayInquiriesCount : 5}
             </h3>
           </div>
-          <div className="mt-2.5 pt-2 border-t border-white/20 flex items-center justify-between text-[11px] text-amber-100">
-            <Link to="/inquiry" className="hover:text-white font-semibold flex items-center gap-1">
+          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
+            <Link to="/inquiry" className="text-amber-600 hover:text-amber-700 font-bold flex items-center gap-1 transition-colors">
               <span>Urgent check</span>
-              <FaArrowRight className="text-[9px]" />
+              <FaArrowRight className="text-[10px] group-hover:translate-x-1 transition-transform" />
             </Link>
-            <span>New queries</span>
+            <span className="text-slate-400 font-medium">New queries</span>
           </div>
         </div>
 
-        {/* Card 4: Response / Consultations (Vibrant Violet/Purple) */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-purple-600 to-pink-600 text-white p-4 rounded-2xl shadow-md shadow-purple-500/20 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group">
+        {/* Card 4: Response / Consultations (Clean White with Purple Accent) */}
+        <div className="relative overflow-hidden bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-purple-200 hover:-translate-y-1 transition-all duration-300 group">
           <div className="flex items-center justify-between">
-            <div className="w-11 h-11 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white shadow-inner">
+            <div className="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 group-hover:rotate-6 transition-transform">
               <FaUserCheck className="text-xl" />
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full">
+            <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-500 px-2.5 py-1 rounded-full">
               Activity
             </span>
           </div>
-          <div className="mt-3">
-            <p className="text-xs font-medium text-purple-100">Response Rate</p>
-            <h3 className="text-2xl md:text-3xl font-extrabold tracking-tight mt-0.5">
+          <div className="mt-4">
+            <p className="text-xs font-medium text-slate-500">Response Rate</p>
+            <h3 className="text-3xl font-extrabold text-slate-800 tracking-tight mt-1">
               98.4%
             </h3>
           </div>
-          <div className="mt-2.5 pt-2 border-t border-white/20 flex items-center justify-between text-[11px] text-purple-100">
-            <span>High priority</span>
-            <span>Active</span>
+          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
+            <span className="text-slate-500 font-bold">High priority</span>
+            <span className="px-2 py-0.5 bg-green-50 text-green-600 rounded-md font-bold">Active</span>
           </div>
         </div>
       </section>
 
       {/* Recharts Analytics Section */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
         {/* Graph 1: Weekly Inquiries & Patient Views (AreaChart) */}
-        <div className="lg:col-span-2 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
+        <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
+              <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
                 <FaChartLine className="text-indigo-600" />
                 <span>Weekly Inquiry Activity</span>
               </h3>
-              <p className="text-xs text-slate-500">
-                Number of patient questions and page views over the last 7 days
+              <p className="text-xs text-slate-500 mt-1">
+                Patient questions and page views over the last 7 days
               </p>
             </div>
-            <span className="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs font-semibold rounded-lg">
+            <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-lg border border-indigo-100">
               Weekly
             </span>
           </div>
 
-          <div className="w-full h-64">
+          <div className="w-full h-72">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={trendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorInquiries" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.4} />
+                    <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.3} />
                     <stop offset="95%" stopColor="#4F46E5" stopOpacity={0.0} />
                   </linearGradient>
                   <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10B981" stopOpacity={0.4} />
+                    <stop offset="5%" stopColor="#10B981" stopOpacity={0.3} />
                     <stop offset="95%" stopColor="#10B981" stopOpacity={0.0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
-                <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#64748B' }} />
-                <YAxis tick={{ fontSize: 11, fill: '#64748B' }} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748B', fontWeight: 600 }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748B', fontWeight: 600 }} />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: '#1E293B',
                     borderRadius: '12px',
                     color: '#fff',
                     border: 'none',
-                    fontSize: '12px'
+                    boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)'
                   }}
-                  itemStyle={{ color: '#fff' }}
+                  itemStyle={{ color: '#fff', fontSize: '12px', fontWeight: 'bold' }}
                 />
-                <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
+                <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '15px', fontWeight: 'bold' }} iconType="circle" />
                 <Area
                   type="monotone"
                   dataKey="Inquiries"
                   stroke="#4F46E5"
-                  strokeWidth={2.5}
+                  strokeWidth={3}
                   fillOpacity={1}
                   fill="url(#colorInquiries)"
                 />
@@ -334,7 +338,7 @@ const Dashboard = () => {
                   type="monotone"
                   dataKey="Views"
                   stroke="#10B981"
-                  strokeWidth={2}
+                  strokeWidth={3}
                   fillOpacity={1}
                   fill="url(#colorViews)"
                 />
@@ -344,40 +348,42 @@ const Dashboard = () => {
         </div>
 
         {/* Graph 2: Monthly Comparison (BarChart) */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
-                <MdOutlineInsertChart className="text-indigo-600 text-lg" />
+              <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                <MdOutlineInsertChart className="text-indigo-600 text-xl" />
                 <span>Monthly Growth</span>
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-500 mt-1">
                 Inquiries vs. Published Articles
               </p>
             </div>
-            <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-lg">
+            <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-lg border border-emerald-100">
               2026
             </span>
           </div>
 
-          <div className="w-full h-64">
+          <div className="w-full h-72">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={monthlyData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
-                <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#64748B' }} />
-                <YAxis tick={{ fontSize: 11, fill: '#64748B' }} />
+              <BarChart data={monthlyData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }} barSize={24}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748B', fontWeight: 600 }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748B', fontWeight: 600 }} />
                 <Tooltip
+                  cursor={{ fill: '#F8FAFC' }}
                   contentStyle={{
                     backgroundColor: '#1E293B',
                     borderRadius: '12px',
                     color: '#fff',
                     border: 'none',
-                    fontSize: '12px'
+                    boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)'
                   }}
+                  itemStyle={{ color: '#fff', fontSize: '12px', fontWeight: 'bold' }}
                 />
-                <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
-                <Bar dataKey="Inquiries" fill="#6366F1" radius={[6, 6, 0, 0]} />
-                <Bar dataKey="Articles" fill="#10B981" radius={[6, 6, 0, 0]} />
+                <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '15px', fontWeight: 'bold' }} iconType="circle" />
+                <Bar dataKey="Inquiries" fill="#6366F1" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="Articles" fill="#10B981" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -385,21 +391,21 @@ const Dashboard = () => {
       </section>
 
       {/* Recent Inquiries Section */}
-      <section className="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5">
-        <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 flex-wrap gap-3">
+      <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="p-6 border-b border-slate-100 flex items-center justify-between flex-wrap gap-4 bg-slate-50/50">
           <div>
-            <h3 className="text-base md:text-lg font-bold text-slate-800 tracking-tight flex items-center gap-2">
+            <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
               <FaInbox className="text-indigo-600" />
               <span>Recent Patient Inquiries</span>
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-slate-500 mt-1">
               Latest patient questions submitted from the website
             </p>
           </div>
 
           <Link
             to="/inquiry"
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 text-indigo-600 text-xs font-semibold rounded-xl border border-slate-200 transition"
+            className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-indigo-50 text-indigo-600 text-xs font-bold rounded-xl border border-slate-200 shadow-sm hover:border-indigo-200 transition-all active:scale-95"
           >
             <span>View All</span>
             <FaArrowRight className="text-[10px]" />
@@ -408,68 +414,68 @@ const Dashboard = () => {
 
         {recentInquiries.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="min-w-full text-left divide-y divide-slate-100">
+            <table className="min-w-full text-left border-collapse">
               <thead>
-                <tr className="bg-slate-50/70 text-slate-500 uppercase text-[11px] font-bold tracking-wider">
-                  <th className="py-2.5 px-3 rounded-l-xl">Patient</th>
-                  <th className="py-2.5 px-3">Contact Info</th>
-                  <th className="py-2.5 px-3">Message</th>
-                  <th className="py-2.5 px-3">Date</th>
-                  <th className="py-2.5 px-3 text-right rounded-r-xl">Action</th>
+                <tr className="bg-white text-slate-500 uppercase text-[11px] font-bold tracking-wider border-b border-slate-100">
+                  <th className="py-4 px-6">Patient</th>
+                  <th className="py-4 px-6">Contact Info</th>
+                  <th className="py-4 px-6">Message</th>
+                  <th className="py-4 px-6">Date</th>
+                  <th className="py-4 px-6 text-right">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-sm">
                 {recentInquiries.map((inquiry, index) => (
                   <tr
                     key={inquiry._id || index}
-                    className="hover:bg-indigo-50/30 transition-colors duration-150"
+                    className="hover:bg-slate-50/80 transition-colors duration-200 group"
                   >
                     {/* Patient Name with Avatar */}
-                    <td className="py-3 px-3 whitespace-nowrap">
-                      <div className="flex items-center gap-2.5">
+                    <td className="py-4 px-6 whitespace-nowrap">
+                      <div className="flex items-center gap-3">
                         <div
-                          className={`w-8 h-8 rounded-full ${getAvatarBg(
+                          className={`w-10 h-10 rounded-full ${getAvatarBg(
                             index
-                          )} text-white flex items-center justify-center font-bold text-xs shadow-sm shrink-0`}
+                          )} text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0 group-hover:scale-110 transition-transform`}
                         >
                           {getInitials(inquiry?.fullName)}
                         </div>
                         <div>
-                          <p className="font-semibold text-slate-800 text-xs md:text-sm">
+                          <p className="font-bold text-slate-800 text-sm">
                             {inquiry?.fullName || 'Anonymous Patient'}
                           </p>
-                          <p className="text-[10px] text-slate-400">
-                            #{inquiry?._id?.slice(-5) || index + 101}
+                          <p className="text-[11px] text-slate-400 font-medium">
+                            ID: #{inquiry?._id?.slice(-6) || index + 101}
                           </p>
                         </div>
                       </div>
                     </td>
 
                     {/* Contact Info */}
-                    <td className="py-3 px-3 whitespace-nowrap">
-                      <div className="space-y-0.5">
-                        <p className="flex items-center gap-1.5 text-xs text-slate-600">
-                          <MdOutlineEmail className="text-indigo-500 shrink-0" />
+                    <td className="py-4 px-6 whitespace-nowrap">
+                      <div className="space-y-1">
+                        <p className="flex items-center gap-2 text-xs font-medium text-slate-600">
+                          <MdOutlineEmail className="text-indigo-500 shrink-0 text-sm" />
                           <span>{inquiry?.email || '-'}</span>
                         </p>
-                        <p className="flex items-center gap-1.5 text-xs text-slate-600">
-                          <FiPhone className="text-emerald-500 shrink-0" />
+                        <p className="flex items-center gap-2 text-xs font-medium text-slate-600">
+                          <FiPhone className="text-emerald-500 shrink-0 text-sm" />
                           <span>{inquiry?.phoneNumber || '-'}</span>
                         </p>
                       </div>
                     </td>
 
                     {/* Message Preview */}
-                    <td className="py-3 px-3 text-xs text-slate-600 max-w-xs">
+                    <td className="py-4 px-6 text-xs text-slate-600 max-w-xs">
                       <p className="truncate" title={inquiry?.message}>
                         {truncateText(inquiry?.message, 45)}
                       </p>
                     </td>
 
                     {/* Date */}
-                    <td className="py-3 px-3 whitespace-nowrap text-xs text-slate-500">
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 rounded-md text-slate-600 font-medium text-[11px]">
-                        <FaCalendarAlt className="text-[9px] text-slate-400" />
+                    <td className="py-4 px-6 whitespace-nowrap text-xs text-slate-500">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 rounded-lg text-slate-600 font-bold text-[11px]">
+                        <FaCalendarAlt className="text-[10px]" />
                         {inquiry?.createdAt
                           ? new Date(inquiry.createdAt).toLocaleDateString()
                           : '-'}
@@ -477,14 +483,14 @@ const Dashboard = () => {
                     </td>
 
                     {/* Action Button */}
-                    <td className="py-3 px-3 whitespace-nowrap text-right">
+                    <td className="py-4 px-6 whitespace-nowrap text-right">
                       <button
                         onClick={() =>
                           navigate('/inquiry/detail', { state: { inquiry } })
                         }
-                        className="inline-flex items-center gap-1 px-2.5 py-1 bg-indigo-50 hover:bg-indigo-600 text-indigo-600 hover:text-white rounded-lg text-xs font-semibold transition cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:border-indigo-600 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 rounded-lg text-xs font-bold transition-all shadow-sm cursor-pointer"
                       >
-                        <FaEye className="text-[11px]" />
+                        <FaEye className="text-sm" />
                         <span>Details</span>
                       </button>
                     </td>
@@ -494,12 +500,12 @@ const Dashboard = () => {
             </table>
           </div>
         ) : (
-          <div className="py-10 text-center">
-            <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-400 mb-2">
-              <FaInbox className="text-xl" />
+          <div className="py-16 text-center flex flex-col items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 mb-4 animate-bounce">
+              <FaInbox className="text-2xl" />
             </div>
-            <p className="text-slate-700 font-semibold text-sm">No inquiries recorded yet</p>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-slate-800 font-bold text-base">No inquiries recorded yet</p>
+            <p className="text-xs text-slate-500 mt-1 max-w-xs">
               Patient questions from the website will appear here in real time.
             </p>
           </div>
