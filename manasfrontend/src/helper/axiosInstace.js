@@ -6,9 +6,11 @@ const isLocalhost =
   (window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1");
 
+const RENDER_BACKEND_URL = "https://dr-manas-backend-gpg1.onrender.com/api/v1";
+
 const BASE_URL = isLocalhost
   ? "http://localhost:5004/api/v1"
-  : "https://db.drmanasaggarwal.com/api/v1";
+  : (import.meta.env.VITE_API_URL || RENDER_BACKEND_URL);
 
 const axiosInstance1 = axios.create({
   baseURL: BASE_URL,
