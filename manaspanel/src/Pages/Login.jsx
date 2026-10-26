@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../Component/AuthContext';
+import { showToast } from '../helper/sweetAlert';
 import { FaUser, FaLock } from 'react-icons/fa';
 import doctorLogo from '../assets/logo1.png';
 
@@ -35,13 +36,21 @@ const Login = () => {
 
       const data = await response.json();
       login(data.token);
-     
-      console.log("mai chala tha");
-      
-
+      showToast({
+        icon: 'success',
+        title: 'Logged in successfully! Welcome back.',
+        position: 'top-end',
+        timer: 2500,
+      });
       navigate('/');
     } catch (error) {
       setError(error.message);
+      showToast({
+        icon: 'error',
+        title: error.message || 'Login failed',
+        position: 'top-end',
+        timer: 3500,
+      });
     } finally {
       setLoading(false);
     }

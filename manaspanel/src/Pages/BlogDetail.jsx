@@ -13,6 +13,7 @@ import {
   FaImage
 } from 'react-icons/fa';
 import { deleteSections } from '../redux/slices/dynamicSlice';
+import { confirmDelete, showToast } from '../helper/sweetAlert';
 
 const BlogDetail = () => {
   const location = useLocation();
@@ -40,10 +41,18 @@ const BlogDetail = () => {
 
   const handleDelete = async () => {
     if (!blog?._id) return;
-    const isConfirm = window.confirm(`Are you sure you want to delete "${blog.title || 'this article'}"?`);
+    const isConfirm = await confirmDelete({
+      title: 'Delete Article?',
+      text: `Are you sure you want to delete "${blog.title || 'this article'}"? This action cannot be undone.`,
+      confirmButtonText: 'Yes, Delete',
+    });
     if (isConfirm) {
       const response = await dispatch(deleteSections(blog._id));
       if (response?.payload) {
+        showToast({
+          icon: 'success',
+          title: 'Article deleted successfully',
+        });
         navigate('/blog/list');
       }
     }

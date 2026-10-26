@@ -602,8 +602,11 @@ const DoctorAbout = () => {
                 data-aos="fade-up"
                 data-aos-delay={index * 100}
               >
-                {/* Glowing Node Dot on Timeline */}
-                <div className="absolute -left-[31px] sm:-left-[39px] top-7 w-4 h-4 rounded-full bg-white border-4 border-[#00B771] shadow-[0_0_12px_rgba(0,183,113,0.6)] group-hover:scale-125 transition-transform" />
+                {/* 
+                  Glowing Node Dot on Timeline - CENTERED 
+                  top-1/2 + -translate-y-1/2 se yeh exactly vertical center me aayega
+                */}
+                <div className="absolute -left-[33px] sm:-left-[41px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white border-4 border-[#00B771] shadow-[0_0_12px_rgba(0,183,113,0.6)] group-hover:scale-125 transition-transform z-10" />
 
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3">
                   <div className="flex flex-wrap items-center gap-2.5">

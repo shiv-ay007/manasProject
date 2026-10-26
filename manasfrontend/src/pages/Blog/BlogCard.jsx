@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { FaRegCalendarAlt, FaBookOpen } from 'react-icons/fa';
 import { FiArrowRight } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
-const BlogCard = ({ title, category, photo, date, description, updatedAt }) => {
+// Cloudinary optimization helper: converts original multi-megabyte images to lightweight WebP/AVIF (600px width)
+const optimizeCloudinaryUrl = (url, width = 600) => {
+  if (!url || typeof url !== 'string') return url;
+  if (url.includes('cloudinary.com') && url.includes('/upload/')) {
+    if (!url.includes('/upload/f_auto')) {
+      return url.replace('/upload/', `/upload/f_auto,q_auto,w_${width},c_fill/`);
+    }
+  }
+  return url;
+};
+
+const BlogCard = ({ title, category, photo, date, description, updatedAt, priority = false }) => {
   const removeHTMLTags = (text) => {
     return text ? text.replace(/<[^>]*>/g, '') : '';
   };
@@ -28,6 +39,7 @@ const BlogCard = ({ title, category, photo, date, description, updatedAt }) => {
   };
 
   const themeColor = '#00B771';
+  const optimizedImgUrl = optimizeCloudinaryUrl(photo?.secure_url, 600);
 
   return (
     <Link
@@ -36,11 +48,12 @@ const BlogCard = ({ title, category, photo, date, description, updatedAt }) => {
       aria-label={`Read article about ${title}`}
       className="group relative block w-full overflow-hidden rounded-2xl sm:rounded-3xl h-[280px] sm:h-[310px] md:h-[320px] border-[2px] border-slate-200/90 hover:border-[#00B771] shadow-sm hover:shadow-xl transition-all duration-500 ease-out cursor-pointer bg-slate-900"
     >
-      {/* Full Background Image */}
+      {/* Full Background Image - Smooth Zoom & Decoded */}
       <img
-        src={photo?.secure_url}
+        src={optimizedImgUrl}
         alt={title}
-        loading="lazy"
+        loading={priority ? 'eager' : 'lazy'}
+        fetchPriority={priority ? 'high' : 'auto'}
         decoding="async"
         className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
       />
@@ -66,7 +79,7 @@ const BlogCard = ({ title, category, photo, date, description, updatedAt }) => {
         </span>
       </div>
 
-      {/* Center Dropping Floating Icon Badge (Matching Case Card) */}
+      {/* Center Dropping Floating Icon Badge (Smooth & Elegant Ease) */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full group-hover:top-[30%] group-hover:-translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] z-20 pointer-events-none">
         <div
           className="w-12 h-12 rounded-full flex items-center justify-center text-white text-base shadow-lg transition-transform duration-300 group-hover:scale-105"
@@ -76,7 +89,7 @@ const BlogCard = ({ title, category, photo, date, description, updatedAt }) => {
         </div>
       </div>
 
-      {/* Bottom Arched Wave Banner (Matching Case Card - Slides up on hover) */}
+      {/* Bottom Arched Wave Banner (Slides up gently on hover) */}
       <div className="absolute bottom-0 left-0 right-0 top-[68%] group-hover:top-[38%] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] z-10 flex flex-col justify-end pointer-events-none">
         {/* SVG Wave Arc */}
         <div className="relative w-full h-6 shrink-0">
@@ -114,4 +127,4 @@ const BlogCard = ({ title, category, photo, date, description, updatedAt }) => {
   );
 };
 
-export default BlogCard;
+export default memo(BlogCard);

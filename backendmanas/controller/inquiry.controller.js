@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer'; // Import Nodemailer
 
 const addInquiry = async (req, res, next) => {
     try {
-        const { fullName, email, phoneNumber, message } = req.body;
+        const { fullName, email, phoneNumber, concern, message } = req.body;
 
         console.log(req.body);
         
@@ -26,6 +26,7 @@ const addInquiry = async (req, res, next) => {
             fullName,
             email,
             phoneNumber,
+            concern,
             message,
         });
 
@@ -51,21 +52,22 @@ const addInquiry = async (req, res, next) => {
                   `Name: ${fullName}\n` +
                   `Email: ${email}\n` +
                   `Phone: ${phoneNumber}\n` +
+                  `Procedure / Concern: ${concern || "N/A"}\n` +
                   `Message: ${message}\n\n` +
                   `Thank you for reaching out!`,
         };
 
-        // Send the email
-        await transporter.sendMail(mailOptions);
-        console.log('Email sent successfully');
-
-        // Send the response back to the client
-        res.status(200).json({
-            success: true,
-            message: "Inquiry sent successfully and email forwarded.",
-            data: inquiry,
+        // Send email in background safely without blocking the inquiry response
+        transporter.sendMail(mailOptions).catch((mailErr) => {
+            console.error('Background mail error for inquiry:', mailErr.message);
         });
 
+        // Send the response back to the client immediately
+        return res.status(200).json({
+            success: true,
+            message: 'Inquiry sent successfully.',
+            data: inquiry,
+        });
     } catch (error) {
         console.error('Error:', error);
         return next(new AppError("An error occurred while processing your inquiry", 500));

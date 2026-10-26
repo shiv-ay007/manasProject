@@ -7,7 +7,8 @@ import {
   MdKeyboardArrowDown
 } from 'react-icons/md';
 import { GiMagnifyingGlass } from 'react-icons/gi';
-import { FaUserMd, FaBriefcaseMedical } from 'react-icons/fa';
+import { FaUserMd, FaBriefcaseMedical, FaPhoneVolume } from 'react-icons/fa';
+import { HiOutlineXMark } from 'react-icons/hi2';
 import logo from '../assets/logo.png';
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
@@ -59,54 +60,70 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     }
   };
 
+  const handleLinkClick = () => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setIsOpen(false);
+    }
+  };
+
   return (
     <>
-      {/* Mobile Backdrop */}
+      {/* Mobile & Tablet Backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 md:hidden transition-opacity duration-300"
+          className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"
           onClick={() => setIsOpen(false)}
         />
       )}
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed md:static top-0 left-0 z-50 h-full bg-[#1E1E2D] text-slate-200 border-r border-[#2C3146] shadow-2xl md:shadow-none flex flex-col transition-all duration-300 ease-in-out shrink-0 ${
+        className={`fixed lg:static top-0 left-0 z-50 h-full bg-[#1E1E2D] text-slate-200 border-r border-[#2C3146] shadow-2xl lg:shadow-none flex flex-col transition-all duration-300 ease-in-out shrink-0 ${
           isOpen
             ? 'w-64 translate-x-0'
-            : '-translate-x-full md:translate-x-0 md:w-20'
+            : '-translate-x-full lg:translate-x-0 lg:w-20'
         }`}
       >
         {/* Top Header / Branding */}
         <div
-          className={`flex items-center py-4 border-b border-[#2C3146] ${
+          className={`flex items-center justify-between py-4 border-b border-[#2C3146] ${
             isOpen ? 'px-4' : 'justify-center px-2'
           }`}
         >
           {isOpen ? (
-            <Link
-              to="/dashboard"
-              onClick={() => {
-                if (window.innerWidth < 768) setIsOpen(false);
-              }}
-              className="flex items-center gap-3 overflow-hidden"
-            >
-              <div className="bg-white/10 p-1 rounded-xl border border-slate-700/50 shadow-inner shrink-0">
-                <img
-                  src={logo}
-                  alt="Dr. Manas Logo"
-                  className="w-10 h-auto object-cover rounded-lg"
-                />
-              </div>
-              <div className="whitespace-nowrap">
-                <span className="block text-white font-bold text-base tracking-wide leading-tight">
-                  Dr. Manas
-                </span>
-                <span className="block text-[10px] font-semibold text-indigo-400 uppercase tracking-widest mt-0.5">
-                  Admin Panel
-                </span>
-              </div>
-            </Link>
+            <>
+              <Link
+                to="/dashboard"
+                onClick={handleLinkClick}
+                className="flex items-center gap-3 overflow-hidden"
+              >
+                <div className="bg-white/10 p-1 rounded-xl border border-slate-700/50 shadow-inner shrink-0">
+                  <img
+                    src={logo}
+                    alt="Dr. Manas Logo"
+                    className="w-10 h-auto object-cover rounded-lg"
+                  />
+                </div>
+                <div className="whitespace-nowrap">
+                  <span className="block text-white font-bold text-base tracking-wide leading-tight">
+                    Dr. Manas
+                  </span>
+                  <span className="block text-[10px] font-semibold text-indigo-400 uppercase tracking-widest mt-0.5">
+                    Admin Panel
+                  </span>
+                </div>
+              </Link>
+
+              {/* Mobile / Tablet Close Button */}
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 lg:hidden transition cursor-pointer"
+                title="Close Sidebar"
+                aria-label="Close Sidebar"
+              >
+                <HiOutlineXMark className="text-2xl" />
+              </button>
+            </>
           ) : (
             <Link
               to="/dashboard"
@@ -136,9 +153,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             <NavLink
               to="/dashboard"
               title={!isOpen ? 'Dashboard' : ''}
-              onClick={() => {
-                if (window.innerWidth < 768) setIsOpen(false);
-              }}
+              onClick={handleLinkClick}
               className={({ isActive }) =>
                 isOpen
                   ? isActive
@@ -181,9 +196,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <div className="pl-4 pr-1 mt-1 space-y-1 border-l-2 border-indigo-500/30 ml-4">
                 <NavLink
                   to="/blog/add"
-                  onClick={() => {
-                    if (window.innerWidth < 768) setIsOpen(false);
-                  }}
+                  onClick={handleLinkClick}
                   className={({ isActive }) =>
                     isActive ? expandedActiveStyle : expandedListStyle
                   }
@@ -194,9 +207,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
                 <NavLink
                   to="/blog/list"
-                  onClick={() => {
-                    if (window.innerWidth < 768) setIsOpen(false);
-                  }}
+                  onClick={handleLinkClick}
                   className={({ isActive }) =>
                     isActive ? expandedActiveStyle : expandedListStyle
                   }
@@ -235,9 +246,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <div className="pl-4 pr-1 mt-1 space-y-1 border-l-2 border-emerald-500/30 ml-4">
                 <NavLink
                   to="/case/add"
-                  onClick={() => {
-                    if (window.innerWidth < 768) setIsOpen(false);
-                  }}
+                  onClick={handleLinkClick}
                   className={({ isActive }) =>
                     isActive ? expandedActiveStyle : expandedListStyle
                   }
@@ -248,9 +257,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
                 <NavLink
                   to="/case/list"
-                  onClick={() => {
-                    if (window.innerWidth < 768) setIsOpen(false);
-                  }}
+                  onClick={handleLinkClick}
                   className={({ isActive }) =>
                     isActive ? expandedActiveStyle : expandedListStyle
                   }
@@ -262,14 +269,33 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             )}
           </div>
 
+          {/* Callback Requests */}
+          <div>
+            <NavLink
+              to="/appointments"
+              title={!isOpen ? 'Callback Requests' : ''}
+              onClick={handleLinkClick}
+              className={({ isActive }) =>
+                isOpen
+                  ? isActive
+                    ? expandedActiveStyle
+                    : expandedListStyle
+                  : isActive
+                  ? collapsedActiveStyle
+                  : collapsedListStyle
+              }
+            >
+              <FaPhoneVolume className="text-xl group-hover:scale-110 transition-transform shrink-0 text-cyan-400" />
+              {isOpen && <span>Callback Requests</span>}
+            </NavLink>
+          </div>
+
           {/* Enquiry */}
           <div>
             <NavLink
               to="/inquiry"
               title={!isOpen ? 'Enquiry' : ''}
-              onClick={() => {
-                if (window.innerWidth < 768) setIsOpen(false);
-              }}
+              onClick={handleLinkClick}
               className={({ isActive }) =>
                 isOpen
                   ? isActive

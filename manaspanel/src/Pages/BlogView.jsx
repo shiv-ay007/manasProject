@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteSections, getSections } from '../redux/slices/dynamicSlice';
+import { confirmDelete, showToast } from '../helper/sweetAlert';
 import {
   FaPlus,
   FaEdit,
@@ -66,11 +67,19 @@ const BlogView = () => {
   };
 
   const handleDelete = async (id, title) => {
-    const isConfirm = window.confirm(`Are you sure you want to delete "${title || 'this article'}"?`);
+    const isConfirm = await confirmDelete({
+      title: 'Delete Article?',
+      text: `Are you sure you want to delete "${title || 'this article'}"? This action cannot be undone.`,
+      confirmButtonText: 'Yes, Delete',
+    });
     if (isConfirm) {
       const response = await dispatch(deleteSections(id));
       if (response?.payload) {
         dispatch(getSections('Blog'));
+        showToast({
+          icon: 'success',
+          title: 'Article deleted successfully',
+        });
       }
     }
   };
@@ -117,12 +126,12 @@ const BlogView = () => {
   };
 
   return (
-    <div className="bg-white p-6 border border-slate-200 shadow-sm rounded-none font-sans">
+    <div className="bg-white p-4 sm:p-6 border border-slate-200 shadow-sm rounded-none font-sans">
       {/* Top Header & Action Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 mb-5 border-b border-slate-200 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 sm:pb-5 mb-4 sm:mb-5 border-b border-slate-200 gap-3 sm:gap-4">
         <div>
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
+          <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">
               Medical Articles & Blog
             </h1>
             <span className="px-2.5 py-0.5 text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
@@ -135,7 +144,7 @@ const BlogView = () => {
         </div>
 
         {/* Action Header Buttons */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={fetchArticles}
             className="px-3 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition cursor-pointer flex items-center gap-1.5"
@@ -147,7 +156,7 @@ const BlogView = () => {
 
           <button
             onClick={handleAddNew}
-            className="px-4 py-1.5 bg-[#1E1E2D] hover:bg-indigo-700 text-white font-semibold text-xs transition cursor-pointer flex items-center gap-1.5 shadow-2xs"
+            className="px-3.5 sm:px-4 py-1.5 bg-[#1E1E2D] hover:bg-indigo-700 text-white font-semibold text-xs transition cursor-pointer flex items-center gap-1.5 shadow-2xs"
           >
             <FaPlus className="text-[10px]" />
             <span>Add New Article</span>
@@ -197,7 +206,7 @@ const BlogView = () => {
 
       {/* Table Section with subtle grid borders and no border-radius */}
       <div className="overflow-x-auto border border-slate-300 rounded-none bg-white">
-        <table className="w-full border-collapse text-center text-sm">
+        <table className="w-full border-collapse text-center text-sm min-w-[700px]">
           {/* Dark Header matching Inquiry table */}
           <thead className="bg-[#1E1E2D] text-white">
             <tr className="uppercase text-[11px] font-bold tracking-wider">

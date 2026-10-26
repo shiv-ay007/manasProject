@@ -1,11 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import BlogCard from './BlogCard';
-
-import blogimage from '../../assets/blog.jpg';
-import blogimage2 from '../../assets/blog1.jpeg';
-import blogimage3 from '../../assets/blof2.jpeg';
-
-import AOS from 'aos'; // Import AOS
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import BreadCrumbs from '../../Component/BreadCums';
 import blogHeroBg from '../../assets/blog-hero-bg.jpg';
 import { useLocation } from 'react-router-dom';
@@ -22,59 +18,79 @@ const BlogPage = () => {
 
   const section1 = useSelector((state) => state?.parent?.sections);
   const loading = useSelector((state) => state?.parent?.loading);
-  const error = useSelector((state) => state?.parent?.error);
 
-  const breadcrumbItems = [
-    { label: 'Home', href: '/' },
-    { label: 'Blog' },
-  ];
+  const breadcrumbItems = useMemo(
+    () => [
+      { label: 'Home', href: '/' },
+      { label: 'Blog' },
+    ],
+    []
+  );
 
-  // Initialize AOS
+  // Initialize AOS smoothly with lightweight settings
   useEffect(() => {
-    AOS.init();
+    AOS.init({
+      duration: 500,
+      once: true,
+      easing: 'ease-out',
+    });
+    window.scrollTo(0, 0);
+    document.title = 'Our Blogs - Dr. Manas Aggarwal';
   }, []);
 
-  console.log("blog page")
-
+  // Fetch sections
   useEffect(() => {
     dispatch(getSections());
   }, [dispatch]);
 
+  // Refresh AOS when data arrives so positions are cleanly calculated
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    if (section1?.length) {
+      AOS.refresh();
+    }
+  }, [section1]);
 
   useEffect(() => {
     if (location.pathname === '/blog') {
       window.scrollTo(0, 0);
     }
-  }, [location]);
+  }, [location.pathname]);
+
+  // If we already have sections in Redux, render them immediately without janky skeleton flash
+  const hasCachedSections = Boolean(section1 && section1.length > 0);
+  const showSkeleton = loading && !hasCachedSections;
 
   return (
     <section>
-      <BreadCrumbs headText={"Our Blog"} items={breadcrumbItems} image={blogHeroBg} />
+      <BreadCrumbs headText={'Our Blog'} items={breadcrumbItems} image={blogHeroBg} />
       <Helmet>
         <title>Our Blogs - Dr. Manas Aggarwal</title>
-        <meta name="description" content="Explore insightful blogs by Dr. Manas Aggarwal, a leading gastroenterology surgeon in Lucknow, covering health tips, patient care, and medical insights." />
-        <meta name="keywords" content="Blogs, Dr. Manas Aggarwal, Gastroenterology, Health Tips, Surgeon, Lucknow, Medical Insights" />
+        <meta
+          name="description"
+          content="Explore insightful blogs by Dr. Manas Aggarwal, a leading gastroenterology surgeon in Lucknow, covering health tips, patient care, and medical insights."
+        />
+        <meta
+          name="keywords"
+          content="Blogs, Dr. Manas Aggarwal, Gastroenterology, Health Tips, Surgeon, Lucknow, Medical Insights"
+        />
       </Helmet>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-10 sm:my-14">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
-          {loading ? (
-            // Show skeleton cards while loading
-            Array.from({ length: 6 }).map((_, index) => (
-              <SkeletonBlogCard key={index} />
-            ))
-          ) : (
-            section1?.map((post, index) => (
-              <BlogCard
-                key={index}
-                {...post}
-                data-aos="fade-up" // Add AOS attribute for animation
-              />
-            ))
-          )}
+          {showSkeleton
+            ? // Show skeleton cards only on cold initial load
+              Array.from({ length: 6 }).map((_, index) => (
+                <SkeletonBlogCard key={index} />
+              ))
+            : section1?.map((post, index) => (
+                <BlogCard
+                  key={post?._id || index}
+                  {...post}
+                  priority={index < 3}
+                  data-aos="fade-up"
+                  data-aos-delay={(index % 3) * 80}
+                />
+              ))}
         </div>
       </div>
 

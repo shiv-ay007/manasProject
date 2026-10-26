@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { FaFacebookF, FaInstagram, FaYoutube, FaWhatsapp, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaClock } from "react-icons/fa";
-import { FiSend, FiArrowRight, FiCheckCircle } from "react-icons/fi";
+import { Helmet } from "react-helmet";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaYoutube,
+  FaWhatsapp,
+  FaMapMarkerAlt,
+  FaPhoneAlt,
+  FaEnvelope,
+  FaClock,
+} from "react-icons/fa";
+import { FiSend, FiCheckCircle } from "react-icons/fi";
 import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
 import { submitInquiry } from "../../redux/Slice/Parent.slice";
 import BreadCrumbs from "../../Component/BreadCums";
 import contactHeroBg from "../../assets/contact-hero-bg.jpg";
-import FaqSection from "../Home/FaqSection";
 
 const ContactForm = () => {
   const socialLinks = [
@@ -29,7 +39,9 @@ const ContactForm = () => {
     },
     {
       icon: <FaWhatsapp />,
-      url: `https://wa.me/918318208837?text=${encodeURIComponent("Hello Dr. Manas Aggarwal, I would like to consult with you.")}`,
+      url: `https://wa.me/918318208837?text=${encodeURIComponent(
+        "Hello Dr. Manas Aggarwal, I would like to consult with you."
+      )}`,
       color: "bg-[#25D366] hover:bg-[#1ebc57]",
       label: "WhatsApp",
     },
@@ -44,16 +56,99 @@ const ContactForm = () => {
     message: "",
   });
 
+  const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const dispatch = useDispatch();
 
+  const validatePhone = (phone) => {
+    const phoneRegex = /^[6-9]\d{9}$/;
+    return phoneRegex.test(phone);
+  };
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+
+    if (name === "fullName") {
+      // Allow only letters and spaces (blocks numbers and symbols)
+      const lettersOnly = value.replace(/[^a-zA-Z\s]/g, "");
+      setFormData((prev) => ({ ...prev, [name]: lettersOnly }));
+
+      if (lettersOnly.trim().length >= 3) {
+        setErrors((prev) => ({ ...prev, fullName: "" }));
+      }
+      return;
+    }
+
+    if (name === "phoneNumber") {
+      const numericValue = value.replace(/\D/g, "").slice(0, 10);
+      setFormData((prev) => ({ ...prev, [name]: numericValue }));
+
+      if (numericValue.length > 0) {
+        if (numericValue.length < 10) {
+          setErrors((prev) => ({
+            ...prev,
+            phoneNumber: "Phone number must be 10 digits",
+          }));
+        } else if (!validatePhone(numericValue)) {
+          setErrors((prev) => ({
+            ...prev,
+            phoneNumber: "Phone must start with 6, 7, 8, or 9",
+          }));
+        } else {
+          setErrors((prev) => ({ ...prev, phoneNumber: "" }));
+        }
+      } else {
+        setErrors((prev) => ({ ...prev, phoneNumber: "" }));
+      }
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+
+      if (name === "fullName" && value.trim().length >= 3) {
+        setErrors((prev) => ({ ...prev, fullName: "" }));
+      }
+
+      if (name === "email" && validateEmail(value.trim())) {
+        setErrors((prev) => ({ ...prev, email: "" }));
+      }
+
+      if (name === "message" && value.trim().length >= 10) {
+        setErrors((prev) => ({ ...prev, message: "" }));
+      }
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.fullName || formData.fullName.trim().length < 3) {
+      newErrors.fullName = "Please enter your full name (minimum 3 characters)";
+    }
+
+    if (
+      !formData.phoneNumber ||
+      formData.phoneNumber.length !== 10 ||
+      !validatePhone(formData.phoneNumber)
+    ) {
+      newErrors.phoneNumber =
+        "Please enter a valid 10-digit Indian phone number (starting with 6-9)";
+    }
+
+    if (!formData.email || !validateEmail(formData.email.trim())) {
+      newErrors.email = "Please enter a valid email address (e.g. name@domain.com)";
+    }
+
+    if (!formData.message || formData.message.trim().length < 10) {
+      newErrors.message = "Please write a brief medical query or message (minimum 10 characters)";
+    }
+
+    setErrors(newErrors);
+    return newErrors;
   };
 
   const breadcrumbItems = [
@@ -63,13 +158,38 @@ const ContactForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const formErrors = validateForm();
+    const errorKeys = Object.keys(formErrors);
+
+    if (errorKeys.length > 0) {
+      const firstErrorMessage = formErrors[errorKeys[0]];
+      toast.error(firstErrorMessage, {
+        id: "contact-form-error",
+      });
+      return;
+    }
+
     setIsLoading(true);
     setIsSuccess(false);
 
     try {
       const response = await dispatch(submitInquiry(formData));
-      if (response?.payload?.data || response?.meta?.requestStatus === "fulfilled") {
+
+      if (
+        response?.payload?.data ||
+        response?.meta?.requestStatus === "fulfilled" ||
+        response?.payload?.success
+      ) {
         setIsSuccess(true);
+        toast.success(
+          "Thank you! Your inquiry has been sent successfully. Dr. Manas Aggarwal's team will contact you shortly.",
+          {
+            id: "contact-form-success",
+            duration: 5000,
+          }
+        );
+
         setFormData({
           fullName: "",
           email: "",
@@ -77,10 +197,20 @@ const ContactForm = () => {
           concern: "",
           message: "",
         });
+        setErrors({});
+
         setTimeout(() => setIsSuccess(false), 6000);
+      } else {
+        const errorMsg =
+          response?.payload?.message || "Failed to submit inquiry. Please try again.";
+        toast.error(errorMsg, { id: "contact-form-error" });
       }
     } catch (err) {
       console.error("Submission failed", err);
+      toast.error(
+        "Network error. Please check your internet connection or call our clinic directly.",
+        { id: "contact-form-error" }
+      );
     } finally {
       setIsLoading(false);
     }
@@ -88,11 +218,33 @@ const ContactForm = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    document.title = "Contact Us - Dr. Manas Aggarwal";
   }, []);
 
   return (
     <section className="bg-[#f8fbfb] min-h-screen text-slate-800">
-      <BreadCrumbs headText={"Contact Us"} items={breadcrumbItems} image={contactHeroBg} />
+      <Helmet>
+        <title>Contact Us - Dr. Manas Aggarwal</title>
+        <meta
+          name="description"
+          content="Get in touch with Dr. Manas Aggarwal for consultations, second opinions, and appointments regarding surgical gastroenterology and liver health in Lucknow."
+        />
+        <meta
+          name="keywords"
+          content="Contact Dr. Manas Aggarwal, Gastroenterology Surgeon Lucknow, Book Appointment, Clinic Location, Phone Number"
+        />
+        <meta property="og:title" content="Contact Us - Dr. Manas Aggarwal" />
+        <meta
+          property="og:description"
+          content="Get in touch with Dr. Manas Aggarwal for consultations and inquiries regarding surgical gastroenterology in Lucknow."
+        />
+      </Helmet>
+
+      <BreadCrumbs
+        headText={"Contact Us"}
+        items={breadcrumbItems}
+        image={contactHeroBg}
+      />
 
       {/* Main Form & Contact Information Showcase */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
@@ -173,7 +325,10 @@ const ContactForm = () => {
                         Consultation Timings
                       </h4>
                       <p className="text-xs sm:text-[13px] text-slate-200 mt-0.5 font-medium">
-                        Mon – Sat: 9:00 AM – 5:00 PM <span className="text-teal-300 font-semibold">(By Appointment)</span>
+                        Mon – Sat: 9:00 AM – 5:00 PM{" "}
+                        <span className="text-teal-300 font-semibold">
+                          (By Appointment)
+                        </span>
                       </p>
                     </div>
                   </div>
@@ -247,7 +402,7 @@ const ContactForm = () => {
                   </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5" noValidate>
                   {/* Name and Phone side-by-side on sm+ screens */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -259,10 +414,23 @@ const ContactForm = () => {
                         name="fullName"
                         value={formData.fullName}
                         onChange={handleChange}
+                        onKeyDown={(e) => {
+                          if (/[0-9]/.test(e.key)) {
+                            e.preventDefault();
+                          }
+                        }}
                         placeholder="e.g. Ramesh Kumar"
-                        required
-                        className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-sm focus:bg-white focus:border-[#00B771] focus:ring-2 focus:ring-[#00B771]/20 outline-none transition-all duration-200"
+                        className={`w-full px-4 py-3 rounded-xl border text-slate-800 text-sm outline-none transition-all duration-200 ${
+                          errors.fullName
+                            ? "bg-red-50/20 border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100"
+                            : "bg-slate-50 border-slate-200 focus:bg-white focus:border-[#00B771] focus:ring-2 focus:ring-[#00B771]/20"
+                        }`}
                       />
+                      {errors.fullName && (
+                        <p className="text-red-500 text-[11px] mt-1 font-medium">
+                          {errors.fullName}
+                        </p>
+                      )}
                     </div>
 
                     <div>
@@ -274,10 +442,18 @@ const ContactForm = () => {
                         name="phoneNumber"
                         value={formData.phoneNumber}
                         onChange={handleChange}
-                        placeholder="+91 98765 43210"
-                        required
-                        className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-sm focus:bg-white focus:border-[#00B771] focus:ring-2 focus:ring-[#00B771]/20 outline-none transition-all duration-200"
+                        placeholder="10 digits (e.g. 9876543210)"
+                        className={`w-full px-4 py-3 rounded-xl border text-slate-800 text-sm outline-none transition-all duration-200 ${
+                          errors.phoneNumber
+                            ? "bg-red-50/20 border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100"
+                            : "bg-slate-50 border-slate-200 focus:bg-white focus:border-[#00B771] focus:ring-2 focus:ring-[#00B771]/20"
+                        }`}
                       />
+                      {errors.phoneNumber && (
+                        <p className="text-red-500 text-[11px] mt-1 font-medium">
+                          {errors.phoneNumber}
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -293,9 +469,17 @@ const ContactForm = () => {
                         value={formData.email}
                         onChange={handleChange}
                         placeholder="name@example.com"
-                        required
-                        className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-sm focus:bg-white focus:border-[#00B771] focus:ring-2 focus:ring-[#00B771]/20 outline-none transition-all duration-200"
+                        className={`w-full px-4 py-3 rounded-xl border text-slate-800 text-sm outline-none transition-all duration-200 ${
+                          errors.email
+                            ? "bg-red-50/20 border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100"
+                            : "bg-slate-50 border-slate-200 focus:bg-white focus:border-[#00B771] focus:ring-2 focus:ring-[#00B771]/20"
+                        }`}
                       />
+                      {errors.email && (
+                        <p className="text-red-500 text-[11px] mt-1 font-medium">
+                          {errors.email}
+                        </p>
+                      )}
                     </div>
 
                     <div>
@@ -324,9 +508,17 @@ const ContactForm = () => {
                       onChange={handleChange}
                       rows="4"
                       placeholder="Briefly describe your symptoms, questions, or medical history..."
-                      required
-                      className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-sm focus:bg-white focus:border-[#00B771] focus:ring-2 focus:ring-[#00B771]/20 outline-none transition-all duration-200 resize-none"
+                      className={`w-full px-4 py-3 rounded-xl border text-slate-800 text-sm outline-none transition-all duration-200 resize-none ${
+                        errors.message
+                          ? "bg-red-50/20 border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100"
+                          : "bg-slate-50 border-slate-200 focus:bg-white focus:border-[#00B771] focus:ring-2 focus:ring-[#00B771]/20"
+                      }`}
                     ></textarea>
+                    {errors.message && (
+                      <p className="text-red-500 text-[11px] mt-1 font-medium">
+                        {errors.message}
+                      </p>
+                    )}
                   </div>
 
                   {/* Submit Button */}
@@ -337,9 +529,24 @@ const ContactForm = () => {
                   >
                     {isLoading ? (
                       <span className="flex items-center gap-2">
-                        <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                        <svg
+                          className="animate-spin h-4 w-4 text-white"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                            fill="none"
+                          />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v8H4z"
+                          />
                         </svg>
                         <span>Submitting Your Message...</span>
                       </span>
@@ -350,66 +557,12 @@ const ContactForm = () => {
                       </>
                     )}
                   </button>
-
-                  <p className="text-[11px] text-center text-slate-400 mt-2 font-medium">
-                    🔒 We respect your privacy. Medical information is kept strictly confidential.
-                  </p>
                 </form>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Hospital Location & Interactive Google Map Section */}
-      <section className="py-8 md:py-12 bg-white border-t border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Section Heading */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <span className="w-6 h-0.5 bg-[#00B771] rounded-full" />
-                <span className="text-xs font-bold uppercase tracking-wider text-[#0e6b56]">
-                  Clinic &amp; Hospital Location
-                </span>
-              </div>
-              <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#112340] tracking-tight">
-                Find Us on Google Maps
-              </h3>
-              <p className="text-xs sm:text-sm text-gray-500 mt-1 max-w-xl">
-                Easily navigate to Dr. Manas Aggarwal’s department at Chandan Hospital, Faizabad Road, Gomti Nagar, Lucknow.
-              </p>
-            </div>
-
-            <a
-              href="https://www.google.com/maps/dir//Dr+Manas+Aggarwal+-+Best+Gastroenterologist+Gomti+Nagar+Lucknow"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-teal-50 hover:bg-[#00B771] text-[#0e6b56] hover:text-white font-bold text-xs sm:text-sm transition-all duration-300 border border-teal-200/60 shadow-sm shrink-0 self-start md:self-auto"
-            >
-              <span>Get Driving Directions</span>
-              <FiArrowRight className="text-sm" />
-            </a>
-          </div>
-
-          {/* Interactive Map Embed with Modern Container */}
-          <div className="relative w-full h-[380px] sm:h-[440px] md:h-[480px] rounded-3xl overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.08)] border border-slate-200">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7117.865288250847!2d81.02269!3d26.873881!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399bfb781a8e1edf%3A0xbb68c9fe3bbab90b!2sDr%20Manas%20Aggarwal%20-%20Best%20Gastroenterologist%20Gomti%20Nagar%20Lucknow%20%7C%20Gastroenterology%20Cancer%20Surgeon%20Lucknow%20%26%20Piles%20Specialist!5e0!3m2!1sen!2sin!4v1728634517939!5m2!1sen!2sin"
-              width="100%"
-              height="100%"
-              className="w-full h-full border-0"
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Dr. Manas Aggarwal Clinic Location at Chandan Hospital, Lucknow"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Frequently Asked Questions Section */}
-      <FaqSection />
     </section>
   );
 };

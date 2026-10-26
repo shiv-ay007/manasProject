@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
-import { FiX, FiPhone, FiMail, FiUser, FiCheckCircle } from "react-icons/fi";
+import toast from "react-hot-toast";
+import { FiX, FiCheckCircle, FiAlertCircle, FiLoader } from "react-icons/fi";
+import axiosInstance1 from "../helper/axiosInstace";
 
 export default function CallbackModal({ classes, children }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,8 +16,8 @@ export default function CallbackModal({ classes, children }) {
     reason: "",
     description: "",
   });
+  const [consent, setConsent] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -29,19 +31,33 @@ export default function CallbackModal({ classes, children }) {
     };
   }, [isOpen]);
 
-  // Phone validation function
   const validatePhone = (phone) => {
     const phoneRegex = /^[6-9]\d{9}$/;
     return phoneRegex.test(phone);
   };
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Handle phone validation on change
+    if (name === "fname" || name === "lname") {
+      // Allow only letters and spaces (blocks numbers and symbols)
+      const lettersOnly = value.replace(/[^a-zA-Z\s]/g, "");
+      setFormData((prev) => ({ ...prev, [name]: lettersOnly }));
+
+      if (name === "fname" && lettersOnly.trim().length >= 3) {
+        setErrors((prev) => ({ ...prev, fname: "" }));
+      }
+      return;
+    }
+
     if (name === "phone") {
-      const numericValue = value.replace(/\D/g, ""); // Remove non-digits
-      const limitedValue = numericValue.slice(0, 10); // Limit to 10 digits
+      const numericValue = value.replace(/\D/g, "");
+      const limitedValue = numericValue.slice(0, 10);
 
       setFormData((prev) => ({ ...prev, [name]: limitedValue }));
 
@@ -54,7 +70,7 @@ export default function CallbackModal({ classes, children }) {
         } else if (!validatePhone(limitedValue)) {
           setErrors((prev) => ({
             ...prev,
-            phone: "Phone number must start with 6, 7, 8, or 9",
+            phone: "Phone must start with 6, 7, 8, or 9",
           }));
         } else {
           setErrors((prev) => ({ ...prev, phone: "" }));
@@ -64,26 +80,82 @@ export default function CallbackModal({ classes, children }) {
       }
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
+
+      if (name === "fname" && value.trim().length >= 3) {
+        setErrors((prev) => ({ ...prev, fname: "" }));
+      }
+
+      if (name === "email" && value.trim()) {
+        if (validateEmail(value.trim())) {
+          setErrors((prev) => ({ ...prev, email: "" }));
+        }
+      }
     }
+  };
+
+  const validateForm = () => {
+    const errs = {};
+
+    if (!formData.fname || formData.fname.trim().length < 3) {
+      errs.fname = "Please enter your full name (minimum 3 characters)";
+    }
+
+    if (!formData.phone || formData.phone.length !== 10 || !validatePhone(formData.phone)) {
+      errs.phone = "Please enter a valid 10-digit Indian phone number (starting with 6-9)";
+    }
+
+    if (formData.email && formData.email.trim().length > 0) {
+      if (!validateEmail(formData.email.trim())) {
+        errs.email = "Please enter a valid email address";
+      }
+    }
+
+    if (!consent) {
+      errs.consent = "Please authorize Dr. Manas Aggarwal's team by checking this box";
+    }
+
+    setErrors(errs);
+    return errs;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const formErrors = validateForm();
+    const errorKeys = Object.keys(formErrors);
+
+    if (errorKeys.length > 0) {
+      const firstErrorMessage = formErrors[errorKeys[0]];
+      toast.error(firstErrorMessage, {
+        id: "callback-form-error",
+      });
+      return;
+    }
+
     setLoading(true);
-    setMessage("");
-    setErrors({});
 
     try {
-      const res = await axios.post(
-        "https://db.drmanasaggarwal.com/api/v1/appointement",
-        formData
-      );
+      let res;
+      try {
+        res = await axiosInstance1.post("/appointement", formData);
+      } catch (instErr) {
+        // Fallback to direct production URL
+        res = await axios.post(
+          "https://db.drmanasaggarwal.com/api/v1/appointement",
+          formData
+        );
+      }
 
       if (res.status === 200 || res.status === 201) {
-        setMessage(
-          "✅ Appointment request submitted successfully! We will contact you soon."
+        toast.success(
+          "Callback request submitted successfully! Dr. Manas Aggarwal's team will contact you shortly.",
+          {
+            id: "callback-form-success",
+            duration: 5000,
+          }
         );
+
+        // Reset form
         setFormData({
           fname: "",
           lname: "",
@@ -93,33 +165,29 @@ export default function CallbackModal({ classes, children }) {
           reason: "",
           description: "",
         });
+        setConsent(false);
+        setErrors({});
 
+        // Close modal after 2 seconds
         setTimeout(() => {
           setIsOpen(false);
-          setMessage("");
-        }, 2200);
+        }, 2000);
       }
     } catch (error) {
       console.error("Submission error:", error);
 
-      if (error.response) {
-        const status = error.response.status;
-        if (status === 400) {
-          setMessage("❌ Please check your information and try again.");
-        } else if (status === 500) {
-          setMessage("❌ Server error. Please try again later.");
-        } else {
-          setMessage("❌ Something went wrong. Please try again.");
-        }
-      } else if (error.request) {
-        setMessage(
-          "❌ Network error. Please check your connection and try again."
-        );
-      } else {
-        setMessage(
-          "❌ Failed to submit appointment request. Please try again."
-        );
+      let errorMsg = "Something went wrong. Please try again or call us directly.";
+      if (error?.response?.data?.message) {
+        errorMsg = error.response.data.message;
+      } else if (error?.response?.data?.error) {
+        errorMsg = error.response.data.error;
+      } else if (error?.message) {
+        errorMsg = error.message;
       }
+
+      toast.error(errorMsg, {
+        id: "callback-form-error",
+      });
     } finally {
       setLoading(false);
     }
@@ -134,10 +202,8 @@ export default function CallbackModal({ classes, children }) {
         className="bg-white rounded-3xl shadow-2xl w-full max-w-xl p-6 sm:p-8 relative border border-teal-100 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Subtle top decoration bar */}
         <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#1495be] via-[#1CB6E6] to-[#00B771]" />
 
-        {/* Close button */}
         <button
           onClick={() => setIsOpen(false)}
           aria-label="Close modal"
@@ -146,7 +212,6 @@ export default function CallbackModal({ classes, children }) {
           <FiX className="text-lg" />
         </button>
 
-        {/* Modal Header */}
         <div className="text-center mb-6">
           <span className="text-[10px] font-bold text-[#00B771] uppercase tracking-wider block mb-1">
             Free Callback Assistance
@@ -159,30 +224,39 @@ export default function CallbackModal({ classes, children }) {
           </p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
-            
             {/* Full Name */}
             <div>
               <label className="block text-xs font-semibold text-gray-700 mb-1">
-                Full Name *
+                Full Name <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 name="fname"
                 value={formData.fname}
                 onChange={handleChange}
+                onKeyDown={(e) => {
+                  if (/[0-9]/.test(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
                 placeholder="e.g. Rahul Sharma"
-                required
-                className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-gray-200 focus:border-[#1CB6E6] focus:ring-2 focus:ring-[#1CB6E6]/20 outline-none transition-all text-gray-800"
+                className={`w-full px-3.5 py-2.5 text-sm rounded-xl border outline-none transition-all text-gray-800 ${
+                  errors.fname
+                    ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100 bg-red-50/20"
+                    : "border-gray-200 focus:border-[#1CB6E6] focus:ring-2 focus:ring-[#1CB6E6]/20"
+                }`}
               />
+              {errors.fname && (
+                <p className="text-red-500 text-[11px] mt-1 font-medium">{errors.fname}</p>
+              )}
             </div>
 
-            {/* Phone */}
+            {/* Phone Number */}
             <div>
               <label className="block text-xs font-semibold text-gray-700 mb-1">
-                Phone Number *
+                Phone Number <span className="text-red-500">*</span>
               </label>
               <input
                 type="tel"
@@ -190,19 +264,18 @@ export default function CallbackModal({ classes, children }) {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="10 digits (e.g. 9876543210)"
-                required
                 className={`w-full px-3.5 py-2.5 text-sm rounded-xl border outline-none transition-all text-gray-800 ${
                   errors.phone
-                    ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100"
+                    ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100 bg-red-50/20"
                     : "border-gray-200 focus:border-[#1CB6E6] focus:ring-2 focus:ring-[#1CB6E6]/20"
                 }`}
               />
               {errors.phone && (
-                <p className="text-red-500 text-[11px] mt-1">{errors.phone}</p>
+                <p className="text-red-500 text-[11px] mt-1 font-medium">{errors.phone}</p>
               )}
             </div>
 
-            {/* Email */}
+            {/* Email Address */}
             <div>
               <label className="block text-xs font-semibold text-gray-700 mb-1">
                 Email Address
@@ -213,11 +286,18 @@ export default function CallbackModal({ classes, children }) {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="e.g. name@example.com"
-                className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-gray-200 focus:border-[#1CB6E6] focus:ring-2 focus:ring-[#1CB6E6]/20 outline-none transition-all text-gray-800"
+                className={`w-full px-3.5 py-2.5 text-sm rounded-xl border outline-none transition-all text-gray-800 ${
+                  errors.email
+                    ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100 bg-red-50/20"
+                    : "border-gray-200 focus:border-[#1CB6E6] focus:ring-2 focus:ring-[#1CB6E6]/20"
+                }`}
               />
+              {errors.email && (
+                <p className="text-red-500 text-[11px] mt-1 font-medium">{errors.email}</p>
+              )}
             </div>
 
-            {/* Patient Type */}
+            {/* Patient Status */}
             <div>
               <label className="block text-xs font-semibold text-gray-700 mb-1">
                 Patient Status
@@ -253,7 +333,7 @@ export default function CallbackModal({ classes, children }) {
               </select>
             </div>
 
-            {/* Brief Detail */}
+            {/* Brief Concern */}
             <div>
               <label className="block text-xs font-semibold text-gray-700 mb-1">
                 Brief Concern
@@ -267,42 +347,48 @@ export default function CallbackModal({ classes, children }) {
                 className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-gray-200 focus:border-[#1CB6E6] focus:ring-2 focus:ring-[#1CB6E6]/20 outline-none transition-all text-gray-800"
               />
             </div>
-
           </div>
 
           {/* Consent Checkbox */}
-          <div className="flex items-start gap-2.5 pt-1">
-            <input
-              type="checkbox"
-              id="consent"
-              className="mt-1 w-4 h-4 rounded text-[#1CB6E6] focus:ring-[#1CB6E6] border-gray-300 cursor-pointer"
-              required
-            />
-            <label htmlFor="consent" className="text-xs text-gray-600 cursor-pointer leading-relaxed">
-              By submitting, you authorize Dr. Manas Aggarwal’s team to contact you via call or WhatsApp.
-            </label>
-          </div>
-
-          {/* Alert Message */}
-          {message && (
-            <div
-              className={`text-center py-2.5 px-3 rounded-xl text-xs sm:text-sm font-medium ${
-                message.includes("✅")
-                  ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
-                  : "bg-red-50 text-red-700 border border-red-200"
-              }`}
-            >
-              {message}
+          <div className="pt-1">
+            <div className="flex items-start gap-2.5">
+              <input
+                type="checkbox"
+                id="consent"
+                checked={consent}
+                onChange={(e) => {
+                  setConsent(e.target.checked);
+                  if (e.target.checked) {
+                    setErrors((prev) => ({ ...prev, consent: "" }));
+                  }
+                }}
+                className={`mt-1 w-4 h-4 rounded text-[#1CB6E6] focus:ring-[#1CB6E6] cursor-pointer ${
+                  errors.consent ? "border-red-500 ring-2 ring-red-200" : "border-gray-300"
+                }`}
+              />
+              <label htmlFor="consent" className="text-xs text-gray-600 cursor-pointer leading-relaxed">
+                By submitting, you authorize Dr. Manas Aggarwal’s team to contact you via call or WhatsApp. <span className="text-red-500">*</span>
+              </label>
             </div>
-          )}
+            {errors.consent && (
+              <p className="text-red-500 text-[11px] mt-1 pl-6 font-medium">{errors.consent}</p>
+            )}
+          </div>
 
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={loading || errors.phone}
-            className="w-full py-3.5 px-5 bg-gradient-to-r from-[#1495be] via-[#1CB6E6] to-[#0ea5e9] hover:from-[#18a2cd] hover:via-[#30c0ec] hover:to-[#1CB6E6] text-white font-serif font-bold text-sm sm:text-base rounded-xl shadow-lg shadow-[#1CB6E6]/30 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 cursor-pointer"
+            disabled={loading}
+            className="w-full py-3.5 px-5 bg-gradient-to-r from-[#1495be] via-[#1CB6E6] to-[#0ea5e9] hover:from-[#18a2cd] hover:via-[#30c0ec] hover:to-[#1CB6E6] text-white font-serif font-bold text-sm sm:text-base rounded-xl shadow-lg shadow-[#1CB6E6]/30 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 cursor-pointer flex items-center justify-center gap-2"
           >
-            {loading ? "Submitting Request..." : "Request a Callback Now →"}
+            {loading ? (
+              <>
+                <FiLoader className="animate-spin text-lg" />
+                Submitting Request...
+              </>
+            ) : (
+              "Request a Callback Now →"
+            )}
           </button>
         </form>
       </div>
@@ -310,8 +396,7 @@ export default function CallbackModal({ classes, children }) {
   ) : null;
 
   return (
-    <div className={classes ? classes : (children ? "inline-block w-auto" : "inline-block")}>
-      {/* Button to open modal */}
+    <div className={classes ? classes : children ? "inline-block w-auto" : "inline-block"}>
       {children ? (
         <div onClick={() => setIsOpen(true)} className="cursor-pointer w-full">
           {children}
@@ -326,7 +411,7 @@ export default function CallbackModal({ classes, children }) {
         </button>
       )}
 
-      {/* Render Modal into document.body to prevent any container clipping */}
+      {/* Render Modal via Portal */}
       {typeof document !== "undefined" && ReactDOM.createPortal(modalContent, document.body)}
     </div>
   );

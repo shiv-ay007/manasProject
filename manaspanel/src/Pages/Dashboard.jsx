@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { getInquiry, getSections } from '../redux/slices/dynamicSlice';
+import { getAppointments, getInquiry, getSections } from '../redux/slices/dynamicSlice';
 import {
   FaInbox,
   FaBlog,
@@ -35,7 +35,7 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { inquiryList = [], sections = [], loading, error } = useSelector(
+  const { inquiryList = [], appointmentList = [], sections = [], loading, error } = useSelector(
     (state) => state.dynamic
   );
 
@@ -45,6 +45,7 @@ const Dashboard = () => {
     setRefreshing(true);
     await Promise.all([
       dispatch(getInquiry()),
+      dispatch(getAppointments()),
       dispatch(getSections('Blog'))
     ]);
     setRefreshing(false);
@@ -135,10 +136,10 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-10 px-2 sm:px-4">
+    <div className="space-y-4 sm:space-y-6 max-w-7xl mx-auto pb-10 px-1 sm:px-4">
       
       {/* Top Banner / Welcome Action Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white/80 backdrop-blur-md p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 bg-white/80 backdrop-blur-md p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm">
         <div>
           <h2 className="text-xl md:text-2xl font-extrabold text-slate-800 tracking-tight">
             Clinic Overview & Analytics
@@ -148,7 +149,7 @@ const Dashboard = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
           {/* Live Date Pill */}
           <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-600 shadow-sm">
             <FaCalendarAlt className="text-indigo-600" />
@@ -166,7 +167,7 @@ const Dashboard = () => {
           <button
             onClick={fetchData}
             disabled={refreshing}
-            className="flex items-center gap-2 px-4 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-100 rounded-xl text-xs font-bold transition-all active:scale-95 disabled:opacity-70"
+            className="flex items-center gap-2 px-3.5 sm:px-4 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-100 rounded-xl text-xs font-bold transition-all active:scale-95 disabled:opacity-70 cursor-pointer"
             title="Refresh statistics"
           >
             <FaSyncAlt className={`text-[13px] ${refreshing ? 'animate-spin' : ''}`} />
@@ -176,7 +177,7 @@ const Dashboard = () => {
       </div>
 
       {/* Compact & Colorful 4-Card Grid */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-5">
         
         {/* Card 1: Total Inquiries (Vibrant Blue/Indigo) */}
         <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-700 text-white p-5 rounded-2xl shadow-lg shadow-blue-500/20 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
@@ -256,25 +257,28 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Card 4: Response / Consultations (Clean White with Purple Accent) */}
-        <div className="relative overflow-hidden bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-purple-200 hover:-translate-y-1 transition-all duration-300 group">
+        {/* Card 4: Callback Requests (Clean White with Cyan Accent) */}
+        <div className="relative overflow-hidden bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-cyan-200 hover:-translate-y-1 transition-all duration-300 group">
           <div className="flex items-center justify-between">
-            <div className="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 group-hover:rotate-6 transition-transform">
-              <FaUserCheck className="text-xl" />
+            <div className="w-12 h-12 rounded-xl bg-cyan-50 flex items-center justify-center text-cyan-600 group-hover:rotate-6 transition-transform">
+              <FiPhone className="text-xl" />
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-500 px-2.5 py-1 rounded-full">
-              Activity
+            <span className="text-[10px] font-bold uppercase tracking-wider bg-cyan-50 text-cyan-700 px-2.5 py-1 rounded-full">
+              Callbacks
             </span>
           </div>
           <div className="mt-4">
-            <p className="text-xs font-medium text-slate-500">Response Rate</p>
+            <p className="text-xs font-medium text-slate-500">Callback Requests</p>
             <h3 className="text-3xl font-extrabold text-slate-800 tracking-tight mt-1">
-              98.4%
+              {appointmentList.length}
             </h3>
           </div>
           <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
-            <span className="text-slate-500 font-bold">High priority</span>
-            <span className="px-2 py-0.5 bg-green-50 text-green-600 rounded-md font-bold">Active</span>
+            <Link to="/appointments" className="text-cyan-600 hover:text-cyan-700 font-bold flex items-center gap-1 transition-colors">
+              <span>View Requests</span>
+              <FaArrowRight className="text-[10px] group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <span className="text-slate-400 font-medium">Popup Form</span>
           </div>
         </div>
       </section>
@@ -392,9 +396,9 @@ const Dashboard = () => {
 
       {/* Recent Inquiries Section */}
       <section className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-        <div className="p-6 border-b border-slate-100 flex items-center justify-between flex-wrap gap-4 bg-slate-50/50">
+        <div className="p-4 sm:p-6 border-b border-slate-100 flex items-center justify-between flex-wrap gap-3 bg-slate-50/50">
           <div>
-            <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+            <h3 className="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
               <FaInbox className="text-indigo-600" />
               <span>Recent Patient Inquiries</span>
             </h3>
@@ -405,7 +409,7 @@ const Dashboard = () => {
 
           <Link
             to="/inquiry"
-            className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-indigo-50 text-indigo-600 text-xs font-bold rounded-xl border border-slate-200 shadow-sm hover:border-indigo-200 transition-all active:scale-95"
+            className="flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white hover:bg-indigo-50 text-indigo-600 text-xs font-bold rounded-xl border border-slate-200 shadow-sm hover:border-indigo-200 transition-all active:scale-95"
           >
             <span>View All</span>
             <FaArrowRight className="text-[10px]" />
@@ -414,7 +418,7 @@ const Dashboard = () => {
 
         {recentInquiries.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="min-w-full text-left border-collapse">
+            <table className="w-full text-left border-collapse min-w-[650px]">
               <thead>
                 <tr className="bg-white text-slate-500 uppercase text-[11px] font-bold tracking-wider border-b border-slate-100">
                   <th className="py-4 px-6">Patient</th>

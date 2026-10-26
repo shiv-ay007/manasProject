@@ -447,7 +447,7 @@ h1, h2, h3, h4, h5, h6,
 .blog-content-body {
   color: #334155;
   font-size: 1.05rem;
-  line-height: 1.95;
+  line-height: 1.7;
 }
 
 .blog-content-body h1,
@@ -462,8 +462,8 @@ h1, h2, h3, h4, h5, h6,
 .blog-content-body h2 {
   font-size: 1.45rem;
   color: #112340;
-  margin-top: 2.25rem;
-  margin-bottom: 0.85rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
   padding: 0;
   background: transparent;
   border-left: none;
@@ -474,13 +474,23 @@ h1, h2, h3, h4, h5, h6,
 .blog-content-body h3 {
   font-size: 1.2rem;
   color: #0e6b56;
-  margin-top: 2.25rem;
-  margin-bottom: 1rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .blog-content-body p {
-  margin-bottom: 1.5rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.65rem;
   color: #475569;
+}
+
+.blog-content-body p:empty,
+.blog-content-body p:has(> br:only-child) {
+  display: none !important;
+}
+
+.blog-content-body br + br {
+  display: none !important;
 }
 
 .blog-content-body strong {
@@ -491,7 +501,7 @@ h1, h2, h3, h4, h5, h6,
 .blog-content-body ul,
 .blog-content-body ol {
   margin-top: 1rem;
-  margin-bottom: 1.75rem;
+  margin-bottom: 0.85rem;
   padding-left: 1.75rem;
 }
 
@@ -504,7 +514,8 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .blog-content-body li {
-  margin-bottom: 0.75rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.65rem;
   color: #475569;
 }
 

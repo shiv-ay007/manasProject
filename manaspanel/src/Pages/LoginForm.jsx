@@ -5,6 +5,7 @@ import { FaEye, FaEyeSlash, FaHeartbeat, FaUserMd, FaLock, FaEnvelope } from 're
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { handleLogin } from '../redux/slices/dynamicSlice';
+import { showToast } from '../helper/sweetAlert';
 import doctor from '../assets/Apron.jpg';
 
 const LoginForm = () => {
@@ -49,12 +50,32 @@ const LoginForm = () => {
     try {
       const response = await dispatch(handleLogin({ email, password }));
       if (response?.payload?.data) {
+        showToast({
+          icon: 'success',
+          title: 'Welcome! Logged in successfully.',
+          position: 'top-end',
+          timer: 2500,
+        });
         navigate('/');
       } else {
-        setError(response?.payload?.message || 'Invalid credentials');
+        const errMsg = response?.payload?.message || 'Invalid email or password';
+        setError(errMsg);
+        showToast({
+          icon: 'error',
+          title: errMsg,
+          position: 'top-end',
+          timer: 3500,
+        });
       }
     } catch (err) {
-      setError(err.message || 'Something went wrong');
+      const errMsg = err.message || 'Something went wrong';
+      setError(errMsg);
+      showToast({
+        icon: 'error',
+        title: errMsg,
+        position: 'top-end',
+        timer: 3500,
+      });
     } finally {
       setLoading(false);
     }

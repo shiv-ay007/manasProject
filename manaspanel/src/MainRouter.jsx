@@ -7,6 +7,7 @@ import WebsiteContent from './Pages/WebsiteContent';
 import TextEditor from './Pages/TextEditor';
 import Inquiry from './Pages/Inquiry';
 import InquiryDetail from './Pages/InquiryDetail';
+import Appointments from './Pages/Appointments';
 import BlogAdd from './Pages/BlogAdd';
 import BlogView from './Pages/BlogView';
 import BlogDetail from './Pages/BlogDetail';
@@ -41,6 +42,7 @@ const MainRouter = () => {
         <Route path="/case/add" element={<CaseAdd />} />
         <Route path="/case/list" element={<CaseView />} />
         <Route path="/inquiry" element={<Inquiry />} />
+        <Route path="/appointments" element={<Appointments />} />
         <Route path="/inquiry/detail" element={<InquiryDetail />} />
       </Route>
 

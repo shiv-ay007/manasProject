@@ -10,6 +10,9 @@ const initialState = {
   sections: [],
   specificSection: [],
   inquiryList: [],
+  appointmentList: [],
+  appointmentPagination: { total: 0, page: 1, limit: 10, totalPages: 1 },
+  casesPagination: { total: 0, page: 1, limit: 6, totalPages: 1 },
   vendorList: [],
   openModel: false,
   isAuthenticated: Cookies.get("isAuthenticated") === "true",
@@ -17,7 +20,7 @@ const initialState = {
 
 export const getAllPages = createAsyncThunk(
   "discounts/getCategory",
-  async (_, { rejectWithValue }) => {
+  async (params = {}, { rejectWithValue }) => {
     try {
       const response = await axiosInstance1.get(`/dynamic`);
       toast.success(response.data.message);
@@ -31,9 +34,15 @@ export const getAllPages = createAsyncThunk(
 
 export const getSections = createAsyncThunk(
   "discounts/section",
-  async (name, { rejectWithValue }) => {
+  async (arg, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance1.get(`/dynamic/${name}`);
+      let pageName = arg;
+      let params = {};
+      if (typeof arg === "object" && arg !== null) {
+        pageName = arg.name;
+        params = arg.params || {};
+      }
+      const response = await axiosInstance1.get(`/dynamic/${pageName}`, { params });
       toast.success(response.data.message);
       return response.data;
     } catch (error) {
@@ -99,7 +108,7 @@ export const deleteSections = createAsyncThunk(
 
 export const getInquiry = createAsyncThunk(
   "discounts/inquiry",
-  async (_, { rejectWithValue }) => {
+  async (params = {}, { rejectWithValue }) => {
     try {
       const response = await axiosInstance1.get(`/inquiry`);
       toast.success(response.data.message);
@@ -127,7 +136,7 @@ export const deleteInquiry = createAsyncThunk(
 
 export const deleteAllInquiry = createAsyncThunk(
   "discounts/delete/all/inquiry",
-  async (_, { rejectWithValue }) => {
+  async (params = {}, { rejectWithValue }) => {
     try {
       const response = await axiosInstance1.delete(`/inquiry/delete/all`);
       toast.success(response.data.message);
@@ -135,6 +144,33 @@ export const deleteAllInquiry = createAsyncThunk(
     } catch (error) {
       toast.error(error?.response?.data?.message || "Failed to delete inquiries");
       return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getAppointments = createAsyncThunk(
+  "discounts/getAppointments",
+  async (params = {}, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance1.get(`/appointement`, { params });
+      return response.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.error || "Failed to fetch callback requests");
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const deleteAppointment = createAsyncThunk(
+  "discounts/deleteAppointment",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance1.delete(`/appointement/${id}`);
+      toast.success(response.data.message || "Appointment deleted successfully");
+      return id;
+    } catch (error) {
+      toast.error(error?.response?.data?.error || "Failed to delete appointment");
+      return rejectWithValue(error?.response?.data);
     }
   }
 );
@@ -177,7 +213,7 @@ export const getSpecificSection = createAsyncThunk(
 
 export const getVendor = createAsyncThunk(
   "discounts/vendor",
-  async (_, { rejectWithValue }) => {
+  async (params = {}, { rejectWithValue }) => {
     try {
       const response = await axiosInstance1.get(`/vendor`);
       toast.success(response.data.message);
@@ -243,6 +279,7 @@ const dynamicSlice = createSlice({
       state.isAuthenticated = false;
       state.vendorList = [];
       state.inquiryList = [];
+      state.appointmentList = [];
       Cookies.remove("isAuthenticated");
       Cookies.remove("loginTimestamp");
       toast.success("Logged out successfully");
@@ -266,6 +303,10 @@ const dynamicSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
+      .addCase(getAppointments.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(getInquiry.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -286,11 +327,27 @@ const dynamicSlice = createSlice({
       })
       .addCase(getSections.fulfilled, (state, action) => {
         state.loading = false;
-        state.sections = action?.payload?.sections;
+        state.sections = action?.payload?.sections || [];
+        if (action?.payload?.pagination) {
+          state.casesPagination = action.payload.pagination;
+        }
       })
       .addCase(getSpecificSection.fulfilled, (state, action) => {
         state.loading = false;
         state.specificSection = action?.payload?.section?.children;
+      })
+      .addCase(getAppointments.fulfilled, (state, action) => {
+        state.loading = false;
+        state.appointmentList = action?.payload?.data || [];
+        if (action?.payload?.pagination) {
+          state.appointmentPagination = action.payload.pagination;
+        }
+      })
+      .addCase(deleteAppointment.fulfilled, (state, action) => {
+        state.loading = false;
+        state.appointmentList = (state.appointmentList || []).filter(
+          (item) => item._id !== action.payload
+        );
       })
       .addCase(getInquiry.fulfilled, (state, action) => {
         state.loading = false;
@@ -316,6 +373,14 @@ const dynamicSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(getSpecificSection.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getAppointments.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(deleteAppointment.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

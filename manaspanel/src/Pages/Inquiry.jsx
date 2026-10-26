@@ -13,6 +13,7 @@ import {
 } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { deleteInquiry, getInquiry } from '../redux/slices/dynamicSlice';
+import { confirmDelete, showToast } from '../helper/sweetAlert';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -67,10 +68,20 @@ const Inquiry = () => {
   }, [filterByName, filterByEmail, filterByPhone, inquiryList]);
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this inquiry?")) {
+    const isConfirmed = await confirmDelete({
+      title: 'Delete Inquiry?',
+      text: 'Are you sure you want to delete this patient inquiry? This action cannot be undone.',
+      confirmButtonText: 'Yes, Delete',
+    });
+
+    if (isConfirmed) {
       const response = await dispatch(deleteInquiry(id));
       if (response?.payload) {
         dispatch(getInquiry());
+        showToast({
+          icon: 'success',
+          title: 'Inquiry deleted successfully',
+        });
       }
     }
   };
@@ -96,12 +107,12 @@ const Inquiry = () => {
   };
 
   return (
-    <div className="bg-white p-6 border border-slate-200 shadow-sm rounded-none">
+    <div className="bg-white p-4 sm:p-6 border border-slate-200 shadow-sm rounded-none">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 mb-5 border-b border-slate-200 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 sm:pb-5 mb-4 sm:mb-5 border-b border-slate-200 gap-3 sm:gap-4">
         <div>
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
+          <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">
               Inquiry List
             </h1>
             <span className="px-2.5 py-0.5 text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
@@ -113,7 +124,7 @@ const Inquiry = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           {hasActiveFilters && (
             <button
               onClick={handleClearFilters}
@@ -135,7 +146,7 @@ const Inquiry = () => {
       </div>
 
       {/* Filter Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-5 p-3.5 bg-slate-50/70 border border-slate-200">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4 sm:mb-5 p-3 sm:p-3.5 bg-slate-50/70 border border-slate-200">
         {/* Filter by Name */}
         <div>
           <label className="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1">
@@ -190,7 +201,7 @@ const Inquiry = () => {
 
       {/* Table Section with subtle grid borders and no border-radius */}
       <div className="overflow-x-auto border border-slate-300 rounded-none bg-white">
-        <table className="w-full border-collapse text-center text-sm">
+        <table className="w-full border-collapse text-center text-sm min-w-[720px]">
           <thead className="bg-[#1E1E2D] text-white">
             <tr className="uppercase text-[11px] font-bold tracking-wider">
               <th className="py-3 px-3 text-center border-r border-[#2C3146] text-white w-14 whitespace-nowrap">
@@ -208,6 +219,9 @@ const Inquiry = () => {
               <th className="py-3 px-4 text-center border-r border-[#2C3146] text-white whitespace-nowrap">
                 PHONE NUMBER
               </th>
+              <th className="py-3 px-4 text-center border-r border-[#2C3146] text-white whitespace-nowrap">
+                PROCEDURE / CONCERN
+              </th>
               <th className="py-3 px-4 text-center border-r border-[#2C3146] text-white">
                 MESSAGE
               </th>
@@ -219,7 +233,7 @@ const Inquiry = () => {
           <tbody className="divide-y divide-slate-200">
             {loading ? (
               <tr>
-                <td colSpan="7" className="py-12 text-center text-slate-500 font-medium">
+                <td colSpan="8" className="py-12 text-center text-slate-500 font-medium">
                   <div className="inline-flex items-center gap-2">
                     <FaSyncAlt className="animate-spin text-indigo-600 text-base" />
                     <span>Loading inquiries...</span>
@@ -228,7 +242,7 @@ const Inquiry = () => {
               </tr>
             ) : error ? (
               <tr>
-                <td colSpan="7" className="py-8 text-center text-red-500 font-medium">
+                <td colSpan="8" className="py-8 text-center text-red-500 font-medium">
                   Error loading inquiries. Please refresh the page.
                 </td>
               </tr>
@@ -282,6 +296,17 @@ const Inquiry = () => {
                       {inquiry.phoneNumber || '—'}
                     </td>
 
+                    {/* 6. PROCEDURE / CONCERN */}
+                    <td className="py-3 px-4 border border-slate-200 whitespace-nowrap text-center">
+                      {inquiry.concern ? (
+                        <span className="px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-700 border border-teal-200 text-xs font-semibold">
+                          {inquiry.concern}
+                        </span>
+                      ) : (
+                        <span className="text-slate-400 italic text-xs">—</span>
+                      )}
+                    </td>
+
                     {/* 6. MESSAGE */}
                     <td
                       className="py-3 px-4 border border-slate-200 text-slate-600 max-w-xs md:max-w-md truncate text-center"
@@ -301,7 +326,7 @@ const Inquiry = () => {
               })
             ) : (
               <tr>
-                <td colSpan="7" className="py-12 px-4 text-center text-slate-400">
+                <td colSpan="8" className="py-12 px-4 text-center text-slate-400">
                   <div className="flex flex-col items-center justify-center gap-2">
                     <p className="text-base font-semibold text-slate-600">No inquiries found</p>
                     <p className="text-xs text-slate-400">

@@ -124,6 +124,27 @@ const BlogDetail = () => {
     ? `https://manasproject.onrender.com/blog/${encodeURIComponent(currentPost.title)}`
     : 'https://manasproject.onrender.com/blog';
 
+  // Clean description HTML to remove excessive empty paragraphs and blank gaps
+  const cleanDescription = useMemo(() => {
+    if (!currentPost?.description) return '';
+    let html = currentPost.description;
+
+    // Remove empty paragraphs containing whitespace, &nbsp;, <br>, or empty tags
+    html = html.replace(/<p[^>]*>(?:\s|&nbsp;|<br\s*\/?>|<(?:span|strong|em|b|i)[^>]*>(?:\s|&nbsp;|<br\s*\/?>)*<\/(?:span|strong|em|b|i)>)*<\/p>/gi, '');
+
+    // Remove empty headings
+    html = html.replace(/<h[1-6][^>]*>(?:\s|&nbsp;|<br\s*\/?>)*<\/h[1-6]>/gi, '');
+
+    // Collapse multiple consecutive <br> tags into at most one <br>
+    html = html.replace(/(?:<br\s*\/?>\s*){2,}/gi, '<br />');
+
+    // Remove leading/trailing breaks and non-breaking spaces inside paragraphs
+    html = html.replace(/<p[^>]*>(?:\s*<br\s*\/?>|\s|&nbsp;)+/gi, '<p>');
+    html = html.replace(/(?:\s*<br\s*\/?>|\s|&nbsp;)+<\/p>/gi, '</p>');
+
+    return html;
+  }, [currentPost?.description]);
+
   if (loading && !currentPost) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center py-20 bg-[#f7fbf9]">
@@ -206,10 +227,10 @@ const BlogDetail = () => {
               ======================================================== */}
           <article className="lg:col-span-8 flex flex-col space-y-8">
             
-            <div className="bg-white rounded-3xl border border-slate-200/90 shadow-[0_4px_30px_rgba(0,0,0,0.04)] p-6 sm:p-8 md:p-10 lg:p-12 overflow-hidden">
+            <div className="bg-white rounded-3xl border border-slate-200/90 shadow-[0_4px_30px_rgba(0,0,0,0.04)] p-5 sm:p-7 md:p-8 lg:p-9 overflow-hidden">
               
               {/* Category, Date & Read Time Header Bar */}
-              <div className="flex flex-wrap items-center justify-between gap-3 pb-5 border-b border-slate-100 text-xs sm:text-sm text-gray-500">
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-100 text-xs sm:text-sm text-gray-500">
                 <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-[#00B771] font-bold border border-emerald-200/80 text-xs">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#00B771] animate-pulse" />
@@ -228,12 +249,12 @@ const BlogDetail = () => {
               </div>
 
               {/* Article Headline */}
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-[#112340] leading-[1.28] tracking-tight my-5 sm:my-7 text-left">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-[#112340] leading-[1.28] tracking-tight my-4 sm:my-6 text-left">
                 {currentPost.title}
               </h1>
 
               {/* Verified Author & Credentials Strip */}
-              <div className="flex items-center justify-between flex-wrap gap-4 p-4 rounded-2xl bg-[#f4f9f6] border border-teal-100/90 mb-7 sm:mb-8">
+              <div className="flex items-center justify-between flex-wrap gap-4 p-3.5 sm:p-4 rounded-2xl bg-[#f4f9f6] border border-teal-100/90 mb-5 sm:mb-6">
                 <div className="flex items-center gap-3">
                   <img
                     src={doctorCutout}
@@ -258,20 +279,20 @@ const BlogDetail = () => {
 
               {/* Featured Article Cover Image */}
               {currentPost.photo?.secure_url && (
-                <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden mb-8 border border-slate-100 shadow-[0_8px_30px_rgba(0,0,0,0.07)] group w-full">
+                <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden mb-6 border border-slate-100 shadow-[0_8px_30px_rgba(0,0,0,0.07)] group w-full">
                   <img
                     src={currentPost.photo.secure_url}
                     alt={currentPost.title}
-                    className="w-full max-h-[460px] object-cover object-center transition-transform duration-700 ease-out group-hover:scale-102"
+                    className="w-full max-h-[440px] object-cover object-center transition-transform duration-700 ease-out group-hover:scale-102"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
                 </div>
               )}
 
-              {/* Full Width Rich Blog Body Content */}
+              {/* Full Width Rich Blog Body Content - Clean, Compact & Perfectly Spaced */}
               <div
-                className="blog-content-body max-w-none pt-2 text-justify sm:text-left text-slate-700 leading-relaxed text-[0.95rem] sm:text-[1.02rem] [&>*:last-child]:mb-0 [&>p:last-of-type]:mb-0"
-                dangerouslySetInnerHTML={{ __html: currentPost.description }}
+                className="blog-content-body max-w-none pt-1 text-justify sm:text-left text-slate-700 leading-relaxed text-[0.95rem] sm:text-[1.02rem] [&>*:last-child]:mb-0 [&>p:last-of-type]:mb-0 [&_h2]:!mt-4 [&_h2]:!mb-1.5 [&_h3]:!mt-3.5 [&_h3]:!mb-1.5 [&_p]:!my-1.5 [&_p]:!leading-relaxed [&_p:empty]:!hidden [&_p:has(>br:only-child)]:!hidden [&_br+br]:!hidden"
+                dangerouslySetInnerHTML={{ __html: cleanDescription }}
               />
 
               {/* Post-Article Social Share Bar (Seamlessly Placed Right Below Blog Content) */}

@@ -5,6 +5,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { MdOutlineDashboard, MdOutlineDescription, MdAdd, MdKeyboardArrowDown } from "react-icons/md";
 import { AiOutlineLogout } from 'react-icons/ai';
 import { GiMagnifyingGlass } from 'react-icons/gi';
+import { confirmAction, showToast } from '../helper/sweetAlert';
 import logo from '../assets/logo.png';
 import companylogo from '../assets/cclogo.png'
 
@@ -16,10 +17,20 @@ const HomeLayout = ({ children }) => {
     const listStyle = 'flex items-center gap-3 py-3 px-4 rounded-md hover:bg-[#5a55db] transition duration-300 text-[#E1E1F3] font-semibold text-[1.1rem] w-full';
     const activeListStyle = `${listStyle} bg-[#655CCE] text-white shadow-md`;
 
-    const handleLogout = () => {
-        const response = window.confirm("Are you sure you want to logout?");
+    const handleLogout = async () => {
+        const response = await confirmAction({
+            title: "Confirm Logout",
+            text: "Are you sure you want to logout?",
+            icon: "warning",
+            confirmButtonText: "Yes, Logout",
+            confirmButtonColor: "#e11d48",
+        });
         if (response) {
             localStorage.removeItem('user');
+            showToast({
+                icon: "success",
+                title: "Logged out successfully!",
+            });
             navigate('/login');
         }
     };

@@ -4,6 +4,7 @@ import 'react-quill/dist/quill.snow.css';
 import { useDispatch } from 'react-redux';
 import { addSections, editSections } from '../redux/slices/dynamicSlice';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { showToast } from '../helper/sweetAlert';
 import {
   FaArrowLeft,
   FaCloudUploadAlt,
@@ -71,7 +72,10 @@ const CaseAdd = ({ onClose }) => {
   const handleSave = async (e) => {
     if (e) e.preventDefault();
     if (!title.trim()) {
-      alert('Please enter a clinical case title');
+      showToast({
+        icon: 'warning',
+        title: 'Please enter a clinical case title',
+      });
       return;
     }
 

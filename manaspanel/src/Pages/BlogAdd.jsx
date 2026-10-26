@@ -4,6 +4,7 @@ import 'react-quill/dist/quill.snow.css';
 import { useDispatch } from 'react-redux';
 import { addSections, editSections } from '../redux/slices/dynamicSlice';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { showToast } from '../helper/sweetAlert';
 import {
   FaArrowLeft,
   FaCloudUploadAlt,
@@ -76,7 +77,10 @@ const BlogAdd = ({ onClose }) => {
   const handleSave = async (e) => {
     if (e) e.preventDefault();
     if (!title.trim()) {
-      alert('Please enter an article title');
+      showToast({
+        icon: 'warning',
+        title: 'Please enter an article title',
+      });
       return;
     }
 

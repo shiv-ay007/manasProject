@@ -351,33 +351,101 @@ const addChildrenToSection = async (req, res, next) => {
 };
 
 // Controller to fetch all sections for a specific page
+// Controller to fetch all sections for a specific page (with backend search & pagination)
 const getSectionsByPage = async (req, res) => {
   const { pageName } = req.params;
-
-  console.log(req.params);
-  
+  const { page, limit, search } = req.query;
 
   try {
-    // Find the page by its name
-    const page = await PageModel.findOne({ name: pageName }).populate(
-      "sections"
-    );
+    const pageNum = parseInt(page, 10);
+    const limitNum = parseInt(limit, 10);
+    const hasPagination = Boolean(pageNum && limitNum);
 
-    console.log(page);
-    
+    // Build filter for SectionModel
+    const filter = {
+      $or: [
+        { page: pageName },
+        { page: pageName.toLowerCase() },
+        { page: pageName.charAt(0).toUpperCase() + pageName.slice(1) },
+      ],
+    };
 
-    if (!page) {
-      return res.status(404).json({
-        success: false,
-        message: "Page not found",
-      });
+    if (search && search.trim()) {
+      filter.$and = [
+        {
+          $or: [
+            { title: { $regex: search.trim(), $options: "i" } },
+            { description: { $regex: search.trim(), $options: "i" } },
+          ],
+        },
+      ];
     }
+
+    const totalCount = await SectionModel.countDocuments(filter);
+
+    let sectionsQuery = SectionModel.find(filter).sort({ createdAt: -1 });
+
+    if (hasPagination) {
+      const skip = (pageNum - 1) * limitNum;
+      sectionsQuery = sectionsQuery.skip(skip).limit(limitNum);
+    }
+
+    let sections = await sectionsQuery;
+
+    // Safety fallback: if SectionModel had 0 matching documents by 'page' property,
+    // fetch via PageModel populated sections (legacy support)
+    if (sections.length === 0 && !search && totalCount === 0) {
+      const pageDoc = await PageModel.findOne({
+        name: { $regex: new RegExp(`^${pageName}$`, "i") },
+      }).populate("sections");
+
+      if (pageDoc && pageDoc.sections && pageDoc.sections.length > 0) {
+        let allSecs = [...pageDoc.sections].sort((a, b) => {
+          const dateA = a?.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const dateB = b?.createdAt ? new Date(b.createdAt).getTime() : 0;
+          return dateB - dateA;
+        });
+
+        if (hasPagination) {
+          const skip = (pageNum - 1) * limitNum;
+          sections = allSecs.slice(skip, skip + limitNum);
+        } else {
+          sections = allSecs;
+        }
+
+        const total = pageDoc.sections.length;
+        const totalPages = Math.ceil(total / (limitNum || total || 1)) || 1;
+
+        return res.status(200).json({
+          success: true,
+          sections,
+          pagination: {
+            total,
+            page: pageNum || 1,
+            limit: limitNum || total,
+            totalPages,
+          },
+        });
+      }
+    }
+
+    const total = totalCount;
+    const totalPages = hasPagination
+      ? Math.ceil(total / limitNum) || 1
+      : 1;
 
     res.status(200).json({
       success: true,
-      sections: page.sections,
+      sections,
+      pagination: {
+        total,
+        page: pageNum || 1,
+        limit: limitNum || total,
+        totalPages,
+      },
     });
   } catch (error) {
+    console.error("Error fetching sections for page:", error);
     res.status(500).json({
       success: false,
       message: "Error fetching sections for page",

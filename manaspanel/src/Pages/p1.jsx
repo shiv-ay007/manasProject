@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getInquiry } from '../redux/slices/dynamicSlice'; // Assuming same slice is used for stats too
 import HomeLayout from '../Component/HomeLayout';
+import { confirmAction, showToast } from '../helper/sweetAlert';
 
 // Import icons from React Icons
 import { FaSignOutAlt, FaInbox, FaBlog } from 'react-icons/fa';
@@ -37,13 +38,23 @@ const Home = () => {
   if (loading) return <p><HomeLayout>Loading dashboard...</HomeLayout></p>;
   if (error) return <p><HomeLayout>Error loading dashboard</HomeLayout></p>;
 
-  const handleLogout = () => {
-    const response=window.confirm("Are you Sure you want to logout")
-    if(response){
-    localStorage.removeItem('user'); // Example for local storage
-    navigate('/login'); // Redirect to the login page
+  const handleLogout = async () => {
+    const response = await confirmAction({
+      title: "Confirm Logout",
+      text: "Are you sure you want to logout?",
+      icon: "warning",
+      confirmButtonText: "Yes, Logout",
+      confirmButtonColor: "#e11d48",
+    });
+    if (response) {
+      localStorage.removeItem('user');
+      showToast({
+        icon: "success",
+        title: "Logged out successfully!",
+      });
+      navigate('/login');
     }
-};
+  };
 
   return (
     <HomeLayout>
