@@ -137,8 +137,8 @@ const CaseView = () => {
   return (
     <div className="w-full min-h-screen bg-[#F4F6F9] text-slate-800 pb-16">
       {/* Top Header Bar - Slim */}
-      <div className="bg-[#1E1E2D] border-b border-[#2C3146] text-white px-6 py-3 shadow-sm">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="bg-[#1E1E2D] border-b border-[#2C3146] text-white px-4 sm:px-6 py-3 shadow-sm">
+        <div className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
               <span className="p-1 rounded-md bg-indigo-500/20 text-indigo-400 text-xs">
@@ -177,7 +177,7 @@ const CaseView = () => {
       </div>
 
       {/* Content Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8">
+      <div className="w-full px-2 sm:px-4 pt-6">
         {/* Search & Filter Bar */}
         <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-sm mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="relative w-full sm:w-96">
