@@ -86,7 +86,7 @@ const Cases = () => {
 
       {/* Hero Header */}
       <BreadCrumbs 
-        headText="Clinical Cases" 
+        headText="Documented Clinical Case Studies" 
         items={[{ label: 'Home', href: '/' }, { label: 'Cases' }]} 
         image={casesHeroBg} 
       />
@@ -94,20 +94,6 @@ const Cases = () => {
       {/* Cases Grid Section */}
       <section className="py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 lg:px-6">
-
-          {/* Section Header */}
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-50 text-[#00B771] font-bold border border-emerald-200/80 text-xs mb-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00B771] animate-pulse" />
-              Surgical Excellence &amp; Operative Results
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#112340]">
-              Documented Clinical Case Studies
-            </h2>
-            <p className="text-xs sm:text-sm text-gray-500 mt-2">
-              Review real clinical presentations, intraoperative findings, and surgical outcomes managed by Dr. Manas Aggarwal.
-            </p>
-          </div>
 
           {/* Loading Shimmer Skeleton */}
           {loading && sortedCases.length === 0 && (

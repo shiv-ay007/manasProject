@@ -104,11 +104,17 @@ const FaqSection = () => {
                 </button>
 
                 {/* Answer Collapse */}
-                {isOpen && (
-                  <div className="px-5 sm:px-6 pb-6 pt-1 text-xs sm:text-[0.92rem] text-gray-600 leading-relaxed border-t border-gray-50">
-                    <p className="pl-11">{faq.a}</p>
+                <div
+                  className={`grid transition-all duration-300 ease-in-out ${
+                    isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <div className="px-5 sm:px-6 pb-6 pt-1 text-xs sm:text-[0.92rem] text-gray-600 leading-relaxed border-t border-gray-50">
+                      <p className="pl-11">{faq.a}</p>
+                    </div>
                   </div>
-                )}
+                </div>
               </div>
             );
           })}

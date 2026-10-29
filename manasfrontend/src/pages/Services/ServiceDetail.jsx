@@ -872,7 +872,8 @@ const services = [
 {
   id: 16, // Update the ID if needed
   name: 'Whipple Surgery',
-  link: 'whilesurgery',
+  link: 'whipple',
+  aliases: ['whilesurgery', 'whipplesurgery', 'whipple-surgery'],
   icon: <FaArrowAltCircleRight />, // Keep or change the icon as needed
   images: [wilnew], // Update with relevant images for Whipple Surgery
   description: `Whipple Surgery, also known as pancreaticoduodenectomy, is a complex operation used to treat pancreatic cancer and other conditions affecting the pancreas, duodenum, and bile duct. It involves the removal of part of the pancreas, the duodenum, gallbladder, and part of the bile duct. Recovery can be extensive, and the surgery is often part of a comprehensive cancer treatment plan.`,

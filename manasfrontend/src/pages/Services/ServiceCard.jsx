@@ -129,12 +129,12 @@ const ServiceCard = () => {
                     </div>
 
                     {/* Service Title with Fixed 2-Line Min-Height for Perfect Baseline */}
-                    <h3 className="relative z-10 text-[1.12rem] sm:text-[1.2rem] font-serif font-bold text-[#112340] group-hover:text-[#0b5f78] transition-colors duration-700 ease-out mb-2.5 leading-snug min-h-[3.2rem] sm:min-h-[3.4rem] flex items-center justify-center text-center">
+                    <h3 className="relative z-10 text-[1.12rem] sm:text-[1.2rem] font-serif font-bold text-[#112340] group-hover:text-[#0b5f78] transition-colors duration-700 ease-out mb-1.5 leading-snug text-center">
                       {service.title}
                     </h3>
 
                     {/* Service Description with Fixed 3-Line Height */}
-                    <p className="relative z-10 text-xs sm:text-[0.85rem] text-gray-500 group-hover:text-gray-700 transition-colors duration-700 ease-out leading-relaxed mb-6 line-clamp-3 min-h-[3.6rem] text-center">
+                    <p className="relative z-10 text-xs sm:text-[0.85rem] text-gray-500 group-hover:text-gray-700 transition-colors duration-700 ease-out leading-relaxed mb-5 line-clamp-3 text-center">
                       {service.description}
                     </p>
                   </div>

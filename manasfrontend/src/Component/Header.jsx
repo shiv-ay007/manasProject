@@ -124,7 +124,7 @@ const Header = () => {
     {
       name: 'Whipple Surgery',
       hasSubItems: false,
-      path: '/treatment/whipple/whilesurgery',
+      path: '/treatment/pancreas/whipple',
     },
     {
       name: 'Antireflux Procedure',
@@ -227,7 +227,7 @@ const Header = () => {
           items: [
             { name: 'Robotic GI Surgery', path: '/treatment/robotic-gi-surgery/roboticsurgery' },
             { name: 'Weight Loss Surgery', path: '/treatment/weight-loss-surgery/weightlosssurgery' },
-            { name: 'Complex Whipple', path: '/treatment/whipple/whilesurgery' },
+            { name: 'Complex Whipple', path: '/treatment/pancreas/whipple' },
           ],
         },
       ],

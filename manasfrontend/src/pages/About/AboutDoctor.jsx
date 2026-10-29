@@ -514,7 +514,7 @@ const DoctorAbout = () => {
             {skillsData.map((skill, idx) => (
               <div
                 key={idx}
-                className="group relative bg-white rounded-3xl p-6 sm:p-7 border border-teal-100 hover:border-teal-300 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col justify-between overflow-hidden cursor-pointer"
+                className="group relative bg-white rounded-3xl p-6 sm:p-7 border border-teal-100 hover:border-teal-300 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col justify-between overflow-hidden cursor-default"
               >
                 {/* Corner-to-corner diagonal color overlay */}
                 <div className="absolute inset-0 bg-gradient-to-br from-[#147a8c] via-[#0d8272] to-[#00B771] origin-top-left scale-0 group-hover:scale-100 transition-transform duration-700 ease-in-out pointer-events-none z-0" />
@@ -554,9 +554,6 @@ const DoctorAbout = () => {
                 {/* Bottom Footer Row */}
                 <div className="relative z-10 mt-6 pt-3.5 border-t border-slate-100 group-hover:border-white/20 flex items-center justify-between text-xs text-gray-400 group-hover:text-white/90 transition-all duration-500">
                   <span className="font-medium tracking-wide">Clinical Standard</span>
-                  <div className="w-7 h-7 rounded-full bg-slate-100 group-hover:bg-white/20 flex items-center justify-center text-[#147a8c] group-hover:text-white transition-all duration-500 group-hover:translate-x-1 font-bold">
-                    →
-                  </div>
                 </div>
               </div>
             ))}

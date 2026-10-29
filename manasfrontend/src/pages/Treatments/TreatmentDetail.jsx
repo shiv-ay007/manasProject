@@ -16,7 +16,6 @@ import 'aos/dist/aos.css';
 import { services } from '../../data/treatmentsData';
 import BreadCrumbs from '../../Component/BreadCums';
 import BookNowSection from '../../Component/BookingSection';
-import BookApointement from '../../Component/BookApointement';
 import doctorCutout from '../../assets/doctor.png';
 
 // Tailored Hero Background Images for Every Treatment Field
@@ -35,13 +34,34 @@ const TreatmentDetail = () => {
   const location = useLocation();
 
   const activeSlug = slug || details || name || '';
+
+  const findMatchingService = (targetSlug, pathname) => {
+    const pathParts = (pathname || '').split('/').filter(Boolean);
+    const lastPart = pathParts[pathParts.length - 1] || '';
+    const cleanTarget = (targetSlug || lastPart || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+    if (!cleanTarget) return null;
+
+    if (cleanTarget.includes('whipple') || cleanTarget.includes('while')) {
+      const whippleService = services.find(s => 
+        (s.name && s.name.toLowerCase().includes('whipple')) ||
+        (s.link && s.link.toLowerCase().includes('whipple'))
+      );
+      if (whippleService) return whippleService;
+    }
+
+    return services.find(s => {
+      const sLink = (s.link || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      const sName = (s.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (sLink && sLink === cleanTarget) return true;
+      if (Array.isArray(s.aliases) && s.aliases.some(a => a.toLowerCase().replace(/[^a-z0-9]/g, '') === cleanTarget)) return true;
+      if (sName && sName === cleanTarget) return true;
+      return false;
+    });
+  };
   
   const [activeService, setActiveService] = useState(() => {
-    const found = services.find(s => 
-      s.link?.toLowerCase() === activeSlug.toLowerCase() ||
-      s.link?.toLowerCase().replace(/[^a-z0-9]/g, '') === activeSlug.toLowerCase().replace(/[^a-z0-9]/g, '')
-    );
-    return found || services[0];
+    return findMatchingService(activeSlug, location.pathname) || services[0];
   });
 
   useEffect(() => {
@@ -51,18 +71,11 @@ const TreatmentDetail = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const pathParts = location.pathname.split('/').filter(Boolean);
-    const lastPart = pathParts[pathParts.length - 1];
-    
-    const found = services.find(s => 
-      s.link?.toLowerCase() === lastPart?.toLowerCase() ||
-      s.link?.toLowerCase().replace(/[^a-z0-9]/g, '') === lastPart?.toLowerCase().replace(/[^a-z0-9]/g, '')
-    );
-
+    const found = findMatchingService(activeSlug, location.pathname);
     if (found) {
       setActiveService(found);
     }
-  }, [location.pathname, slug, details, name]);
+  }, [location.pathname, slug, details, name, activeSlug]);
 
   if (!activeService) return null;
 
@@ -234,15 +247,15 @@ const TreatmentDetail = () => {
                   </div>
 
                   <div className="flex items-center gap-2 w-full sm:w-auto">
-                    <BookApointement classes="flex-1 sm:flex-initial">
-                      <button
-                        type="button"
-                        className="w-full sm:w-auto px-4 py-2.5 bg-[#00B771] hover:bg-[#009e5f] text-white font-serif font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                      >
-                        <FaCalendarAlt />
-                        <span>Book Consult</span>
-                      </button>
-                    </BookApointement>
+                    <a
+                      href="https://chandanhospital.in/doctor/dr-manas-aggarwal"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full sm:w-auto px-4 py-2.5 bg-[#00B771] hover:bg-[#009e5f] text-white font-serif font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer flex-1 sm:flex-initial"
+                    >
+                      <FaCalendarAlt />
+                      <span>Book Consult</span>
+                    </a>
                     <a
                       href="tel:+918318208837"
                       className="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-gray-800 font-semibold text-xs rounded-xl transition-all flex items-center gap-1.5"

@@ -3,6 +3,18 @@ import { FaRegCalendarAlt, FaBookOpen } from 'react-icons/fa';
 import { FiArrowRight } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
+// Clean kebab-case slug generator for URLs
+const createSlug = (text) => {
+  if (!text || typeof text !== 'string') return '';
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
 // Cloudinary optimization helper: converts original multi-megabyte images to lightweight WebP/AVIF (600px width)
 const optimizeCloudinaryUrl = (url, width = 600) => {
   if (!url || typeof url !== 'string') return url;
@@ -43,7 +55,7 @@ const BlogCard = ({ title, category, photo, date, description, updatedAt, priori
 
   return (
     <Link
-      to={`/blog/${encodeURIComponent(title)}`}
+      to={`/blog/${createSlug(title)}`}
       state={{ title, category, photo, date, description }}
       aria-label={`Read article about ${title}`}
       className="group relative block w-full overflow-hidden rounded-2xl sm:rounded-3xl h-[280px] sm:h-[310px] md:h-[320px] border-[2px] border-slate-200/90 hover:border-[#00B771] shadow-sm hover:shadow-xl transition-all duration-500 ease-out cursor-pointer bg-slate-900"

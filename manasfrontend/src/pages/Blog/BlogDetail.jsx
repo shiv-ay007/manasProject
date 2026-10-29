@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import Slider from 'react-slick';
 import { getSections } from '../../redux/Slice/Parent.slice';
 import BreadCrumbs from '../../Component/BreadCums';
@@ -10,6 +10,7 @@ import BookNowSection from '../../Component/BookingSection';
 import BookApointement from '../../Component/BookApointement';
 import FaqSection from '../Home/FaqSection';
 import { Helmet } from 'react-helmet';
+import { FaXTwitter } from 'react-icons/fa6';
 import { 
   FaRegCalendarAlt, 
   FaHospitalAlt, 
@@ -19,7 +20,6 @@ import {
   FaCheckCircle,
   FaWhatsapp,
   FaFacebookF,
-  FaTwitter,
   FaLinkedinIn,
   FaAward,
   FaArrowLeft,
@@ -36,12 +36,26 @@ import {
 } from 'react-icons/fa';
 import { LuPhoneCall } from 'react-icons/lu';
 
+// Clean kebab-case slug generator for matching and canonical URLs
+const createSlug = (text) => {
+  if (!text || typeof text !== 'string') return '';
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
 const BlogDetail = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
   const { title } = useParams();
   const sliderRef = useRef(null);
 
-  const [currentPost, setCurrentPost] = useState(null);
+  const [currentPost, setCurrentPost] = useState(location.state || null);
   const sections = useSelector((state) => state?.parent?.sections) || [];
   const loading = useSelector((state) => state?.parent?.loading);
 
@@ -50,9 +64,11 @@ const BlogDetail = () => {
     if (!sections.length) return [];
     const currentId = currentPost?._id;
     const currentTitle = currentPost?.title?.trim().toLowerCase();
+    const currentSlug = currentPost?.title ? createSlug(currentPost.title) : '';
     return sections.filter((post) => {
       if (currentId && post?._id === currentId) return false;
       if (currentTitle && post?.title?.trim().toLowerCase() === currentTitle) return false;
+      if (currentSlug && post?.title && createSlug(post.title) === currentSlug) return false;
       return true;
     });
   }, [sections, currentPost]);
@@ -77,15 +93,26 @@ const BlogDetail = () => {
     }
   }, [dispatch, sections.length]);
 
-  // Find current post by matching normalized title
+  // Find current post by matching genuine slug, normalized title, or ID
   useEffect(() => {
     if (sections.length > 0 && title) {
       const decodedParam = decodeURIComponent(title).trim().toLowerCase();
+      const slugParam = createSlug(decodedParam);
       const found = sections.find((post) => {
-        if (!post?.title) return false;
-        return post.title.trim().toLowerCase() === decodedParam;
+        if (!post) return false;
+        // 1. Match generated genuine kebab-case slug
+        if (post.title && createSlug(post.title) === slugParam) return true;
+        // 2. Match raw title (backward compatibility for existing URLs or %20 spaces)
+        if (post.title && post.title.trim().toLowerCase() === decodedParam) return true;
+        // 3. Match backend slug if present
+        if (post.slug && (post.slug.toLowerCase() === decodedParam || createSlug(post.slug) === slugParam)) return true;
+        // 4. Match by ID if param was an ID
+        if (post._id && post._id === title) return true;
+        return false;
       });
-      setCurrentPost(found || null);
+      if (found) {
+        setCurrentPost(found);
+      }
     }
   }, [title, sections]);
 
@@ -119,9 +146,9 @@ const BlogDetail = () => {
     { label: currentPost?.title || 'Article' },
   ];
 
-  // Share URL using production live deployment: https://manasproject.onrender.com/blog
+  // Share URL using production live deployment with genuine clean slug
   const articleShareUrl = currentPost?.title 
-    ? `https://manasproject.onrender.com/blog/${encodeURIComponent(currentPost.title)}`
+    ? `https://manasproject.onrender.com/blog/${createSlug(currentPost.title)}`
     : 'https://manasproject.onrender.com/blog';
 
   // Clean description HTML to remove excessive empty paragraphs and blank gaps
@@ -207,13 +234,14 @@ const BlogDetail = () => {
         
         {/* Top Navigation Row: Back to All Blogs Link */}
         <div className="mb-6 flex items-center justify-between">
-          <Link
-            to="/blog"
-            className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#0e6b56] hover:text-[#00B771] transition-colors group"
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#0e6b56] hover:text-[#00B771] transition-colors group cursor-pointer"
           >
             <FaArrowLeft className="text-xs group-hover:-translate-x-1 transition-transform" />
             <span>Back to All Health Articles</span>
-          </Link>
+          </button>
           <span className="text-xs text-gray-400 font-medium">
             Published in Surgical Gastroenterology Insights
           </span>
@@ -322,13 +350,13 @@ const BlogDetail = () => {
                     <FaFacebookF className="text-xs sm:text-sm" />
                   </a>
                   <a
-                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(currentPost.title)}&url=${encodeURIComponent(articleShareUrl)}`}
+                    href={`https://x.com/intent/tweet?text=${encodeURIComponent(currentPost.title)}&url=${encodeURIComponent(articleShareUrl)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="Share on Twitter"
-                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#1DA1F2] text-white flex items-center justify-center hover:scale-110 transition-transform shadow-xs cursor-pointer"
+                    aria-label="Share on X"
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black text-white flex items-center justify-center hover:scale-110 transition-transform shadow-xs cursor-pointer"
                   >
-                    <FaTwitter className="text-xs sm:text-sm" />
+                    <FaXTwitter className="text-xs sm:text-sm" />
                   </a>
                   <a
                     href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(articleShareUrl)}`}
@@ -426,7 +454,7 @@ const BlogDetail = () => {
                   {recentPosts.slice(0, 5).map((post, idx) => (
                     <Link
                       key={idx}
-                      to={`/blog/${encodeURIComponent(post.title)}`}
+                      to={`/blog/${createSlug(post.title)}`}
                       className="group flex gap-3.5 items-center pt-3.5 first:pt-0 hover:bg-slate-50/70 p-2 rounded-2xl transition-all duration-200"
                     >
                       {/* Thumbnail Image */}
