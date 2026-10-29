@@ -98,11 +98,17 @@ const HomeAbout = () => {
                     </div>
                   ))}
 
-                  {/* 5th Count Circle with Pulse Effect */}
-                  <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#0a4639] via-[#0d5949] to-[#062c24] text-white flex items-center justify-center text-[0.82rem] font-black ring-2 ring-white shadow-[0_4px_12px_rgba(10,70,57,0.35)] z-10 shrink-0 transform hover:scale-105 transition-transform cursor-pointer">
-                    <span>16k+</span>
-                    {/* Animated Ripple Ping */}
-                    <span className="absolute inset-0 rounded-full bg-emerald-400 opacity-30 animate-ping pointer-events-none" />
+                  {/* Doctor Profile PNG Circle */}
+                  <div
+                    className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#e8f8f2] via-[#d7f4e8] to-[#bfeadb] ring-2 ring-white shadow-[0_4px_10px_rgba(0,0,0,0.15)] z-10 shrink-0 transform hover:-translate-y-1.5 hover:scale-110 hover:z-20 transition-all duration-300 ease-out cursor-pointer overflow-hidden flex items-end justify-center"
+                    title="Dr. Manas Aggarwal"
+                  >
+                    <img
+                      src={doctorCutout}
+                      alt="Dr. Manas Aggarwal"
+                      className="w-full h-full object-cover object-top scale-115 origin-top"
+                      loading="lazy"
+                    />
                   </div>
                 </div>
 
