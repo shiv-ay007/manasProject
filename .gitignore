@@ -1,5 +1,7 @@
 manasfrontend/node_modules
+manasfrontend/.env
 manaspanel/node_modules
 backendmanas/node_modules
+backendmanas/.env
 backendmanas/.env
 *.zip

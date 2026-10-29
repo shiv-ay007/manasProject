@@ -32,10 +32,10 @@ export const createAppointment = async (req, res) => {
     try {
       const mailOptions = {
         from: process.env.EMAIL_USER,
-        to: "shivamyadav993671@gmail.com",
+        to: "shivam.yadav.cse01@gmail.com",
         subject: "New Callback / Appointment Request from Website",
         html: `
-          <p>Dear Team,</p>
+          <p>Dear Dr Manas Aggrawal,</p>
           <p>
             You have received a new inquiry from the website 
             <a href="https://drmanasaggarwal.com/" target="_blank">
