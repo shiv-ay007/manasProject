@@ -47,11 +47,20 @@ app.use(
       "https://drmanasaggrawalji.netlify.app",
       "https://drmanasdashboard.netlify.app",
       "https://admin-panel-manas-aggrawal.onrender.com",
-      "https://manasproject.onrender.com"
+      "https://manasproject.onrender.com",
+      "https://drmanasaggarwal.com/",
+      "http://drmanasaggarwal.com/",
+      "https://drmanasaggarwal.com",
+      "http://drmanasaggarwal.com",
     ],
     credentials: true,
   })
 );
+
+// app.use(cors({
+//   origin:"*",
+//   credentials: true,
+// }))
 
 
 app.get("/express/vistor-count",getVisitorCount)
