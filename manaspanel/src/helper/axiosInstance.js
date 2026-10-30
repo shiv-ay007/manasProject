@@ -6,7 +6,7 @@ const isLocalhost =
   (window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1");
 
-const RENDER_BACKEND_URL = "https://dr-manas-backend-gpg1.onrender.com/api/v1";
+const RENDER_BACKEND_URL = "https://db.drmanasaggarwal.com/api/v1";
 
 const BASE_URL =
   import.meta.env.VITE_API_URL ||
