@@ -14,7 +14,7 @@ import pattern from '../../assets/whywechoose.png';
 
 const slides = [
   {
-    image: sliderHospitalBuilding,
+    image: "/chandan-hospital-building.webp",
     alt: "Chandan Hospital Lucknow - Dr. Manas Aggarwal Surgical Gastroenterology",
     badge: "Chandan Hospital, Lucknow",
     subBadge: "Dr. Manas Aggarwal",
@@ -58,7 +58,7 @@ const HomeSlider = () => {
     infinite: true,
     speed: 700,
     autoplay: true,
-    autoplaySpeed: 4500,
+    autoplaySpeed: 5500,
     pauseOnHover: false,
     slidesToShow: 1,
     slidesToScroll: 1,
