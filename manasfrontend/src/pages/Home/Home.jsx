@@ -9,7 +9,7 @@ import ServiceCard from '../Services/ServiceCard';
 import CaseShowcase from './CaseShowcase';
 import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import GoogleReviewsWidget from '../../Component/GoolgeWidetBuget';
+
 import PatientJourney from './PatientJourney';
 import PatientReviews from './PatientReviews';
 import FaqSection from './FaqSection';
