@@ -139,9 +139,9 @@ export default function CallbackModal({ classes, children }) {
       try {
         res = await axiosInstance1.post("/appointement", formData);
       } catch (instErr) {
-        // Fallback to direct Render backend URL
+        // Fallback to direct live backend URL
         res = await axios.post(
-          "https://dr-manas-backend-gpg1.onrender.com/api/v1/appointement",
+          "https://db.drmanasaggarwal.com/api/v1/appointement",
           formData
         );
       }
