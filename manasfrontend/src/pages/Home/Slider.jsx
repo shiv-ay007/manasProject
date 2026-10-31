@@ -1,10 +1,10 @@
 import React from 'react';
 import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
-import sliderHospitalBuilding from '../../assets/slider/chandan-hospital-building.jpg';
-import sliderHospitalIcu from '../../assets/slider/chandan-hospital-icu.jpg';
-import sliderHospitalPharmacy from '../../assets/slider/chandan-hospital-pharmacy.jpg';
-import doctorPic from '../../assets/doctor.png';
+import sliderHospitalBuilding from '../../assets/slider/chandan-hospital-building.webp';
+import sliderHospitalIcu from '../../assets/slider/chandan-hospital-icu.webp';
+import sliderHospitalPharmacy from '../../assets/slider/chandan-hospital-pharmacy.webp';
+import doctorPic from '../../assets/doctor.webp';
 import slider1 from '../../assets/slider-rename/appointment-1.png';
 import slider2 from '../../assets/slider-rename/diets.png';
 import slider3 from '../../assets/slider-rename/doctor-1.png';
@@ -75,6 +75,10 @@ const HomeSlider = () => {
                 alt={slide.alt}
                 className="w-full h-full object-cover object-[center_25%] select-none"
                 loading={idx === 0 ? "eager" : "lazy"}
+                fetchPriority={idx === 0 ? "high" : "low"}
+                decoding={idx === 0 ? "sync" : "async"}
+                width="1376"
+                height="768"
               />
 
               {/* Gentle readability overlay on text side - keeping hospital background bright and clear */}
@@ -89,6 +93,9 @@ const HomeSlider = () => {
                           src={doctorPic}
                           alt="Dr. Manas Aggarwal"
                           className="w-7 h-7 rounded-full object-cover object-top border border-emerald-400 bg-white"
+                          loading="eager"
+                          width="28"
+                          height="28"
                         />
                         <div className="leading-tight">
                           <p className="text-[11px] font-bold text-white flex items-center gap-1">
@@ -145,6 +152,10 @@ const HomeSlider = () => {
                           src={doctorPic}
                           alt="Dr. Manas Aggarwal - Senior Gastrosurgeon Chandan Hospital"
                           className="h-full w-auto object-contain object-bottom select-none filter drop-shadow-[0_14px_28px_rgba(0,0,0,0.6)] pointer-events-auto"
+                          loading="eager"
+                          fetchPriority="high"
+                          width="896"
+                          height="1075"
                         />
 
                         {/* Floating Glassmorphism Doctor Badge */}
