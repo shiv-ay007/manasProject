@@ -9,7 +9,7 @@ import image5 from '../../assets/service/gallbladder.png';
 import image6 from '../../assets/service/Antireflux1.png';
 import image7 from '../../assets/service/digestive-system.png';
 import image8 from '../../assets/service/colorrecutm1.png';
-import image9 from '../../assets/service/instenstine.jpg';
+import image9 from '../../assets/service/instenstine.webp';
 import image10 from '../../assets/service/servicephoto/ch.jpeg';
 import image11 from '../../assets/service/servicephoto/gbd.jpeg';
 import image12 from '../../assets/service/servicephoto/livc.jpeg';
@@ -124,6 +124,9 @@ const ServiceCard = () => {
                           src={service.img}
                           alt={service.title}
                           className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-out"
+                          loading="lazy"
+                          width="128"
+                          height="128"
                         />
                       </div>
                     </div>

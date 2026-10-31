@@ -195,6 +195,9 @@ const Cases = () => {
                       src={caseItem.image}
                       alt={`${caseItem.name} - Case Study`}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                      loading="lazy"
+                      width="300"
+                      height="192"
                     />
 
                     {/* Category pill on top of image */}

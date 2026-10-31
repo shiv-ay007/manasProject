@@ -1,0 +1,19 @@
+{
+  "@context": "https://schema.org",
+  "specVersion": "v0.91",
+  "host": "drmanasaggarwal.com",
+  "entries": [
+    {
+      "identifier": "urn:air:drmanasaggarwal.com:site:healthcare",
+      "displayName": "Dr. Manas Aggarwal - Surgical Gastroenterology & GI Care",
+      "type": "text/html",
+      "description": "Surgical gastroenterologist and GI specialist in Lucknow providing advanced laparoscopic, HPB, and GI surgical consultations.",
+      "representativeQueries": [
+        "Consult surgical gastroenterologist Dr Manas Aggarwal in Lucknow",
+        "Book appointment for gastrointestinal and laparoscopic surgery",
+        "Expert care for liver, gallbladder, pancreas, and GI disorders"
+      ],
+      "url": "https://drmanasaggarwal.com"
+    }
+  ]
+}

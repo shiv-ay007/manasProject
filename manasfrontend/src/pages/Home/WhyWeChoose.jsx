@@ -3,7 +3,7 @@ import { FiUsers, FiTarget } from 'react-icons/fi';
 import { LuMicroscope, LuHeartPulse, LuShieldCheck, LuFlaskConical } from 'react-icons/lu';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import doctorTeamBg from '../../assets/slider/slider-doctor.jpg';
+import doctorTeamBg from '../../assets/slider/slider-doctor.webp';
 
 const WhyChooseUs = () => {
   useEffect(() => {
@@ -61,6 +61,7 @@ const WhyChooseUs = () => {
           src={doctorTeamBg}
           alt="Medical Doctors"
           className="w-full h-full object-cover object-center filter blur-md scale-105 opacity-20"
+          loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-white/85 via-[#e8f6f2]/75 to-white/85" />
         {/* Distinct Style: Precision Medical Blueprint Grid (No dots) */}

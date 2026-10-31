@@ -3,8 +3,8 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { Link } from 'react-router-dom';
 import { FaArrowRight, FaStar } from 'react-icons/fa';
-import doctorCutout from '../../assets/doctor.png';
-import clinicBg from '../../assets/slider/slider-hospital-lobby.jpg';
+import doctorCutout from '../../assets/doctor.webp';
+import clinicBg from '../../assets/slider/slider-hospital-lobby.webp';
 
 const patientAvatars = [
   {
@@ -166,6 +166,9 @@ const HomeAbout = () => {
                   src={clinicBg}
                   alt="Chandan Hospital Clinic"
                   className="w-full h-full object-cover object-center filter brightness-105 contrast-95 opacity-80"
+                  loading="lazy"
+                  width="460"
+                  height="530"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-teal-900/10" />
               </div>
@@ -177,6 +180,8 @@ const HomeAbout = () => {
                   alt="Dr. Manas Aggarwal"
                   className="max-h-[105%] w-auto object-contain object-bottom select-none drop-shadow-[0_15px_25px_rgba(0,0,0,0.18)]"
                   loading="lazy"
+                  width="420"
+                  height="550"
                 />
               </div>
 

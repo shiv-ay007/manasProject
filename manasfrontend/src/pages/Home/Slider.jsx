@@ -49,6 +49,8 @@ const slides = [
 ];
 
 const HomeSlider = () => {
+  const [activeSlide, setActiveSlide] = React.useState(0);
+
   // Slider settings
   const settings = {
     dots: true,
@@ -61,6 +63,7 @@ const HomeSlider = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     fade: true,
+    beforeChange: (current, next) => setActiveSlide(next),
   };
 
   return (
@@ -127,6 +130,7 @@ const HomeSlider = () => {
                         href={slide.link}
                         target="_blank"
                         rel="noopener noreferrer"
+                        tabIndex={activeSlide === idx ? 0 : -1}
                         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white text-xs sm:text-sm font-serif font-semibold shadow-[0_4px_16px_rgba(16,185,129,0.35)] transition-all transform hover:-translate-y-0.5 cursor-pointer"
                       >
                         <span>{slide.actionText}</span>
@@ -134,6 +138,7 @@ const HomeSlider = () => {
                       </a>
                       <Link
                         to="/about-dr-manas-aggarwal"
+                        tabIndex={activeSlide === idx ? 0 : -1}
                         className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-serif font-medium border border-white/25 backdrop-blur-sm transition-colors"
                       >
                         <span>About Dr. Manas</span>
